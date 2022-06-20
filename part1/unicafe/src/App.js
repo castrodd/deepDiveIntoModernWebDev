@@ -2,9 +2,7 @@ import React, { useState } from "react";
 
 const Header = props => <h1>{props.text}</h1>
 
-const Display = props => <div>{props.text} {props.value}</div>
-
-const DisplayPercentage = props => <div>{props.text} {props.value} %</div>
+const StatisticsLine = props => <tr><td>{props.text}</td><td>{props.value}</td></tr>
 
 const Button = (props) => (
   <button onClick={props.handleClick}>
@@ -30,7 +28,33 @@ const calculateAverage = (values) => {
 const calculatePositive = (values) => {
   const [good] = values
   const total = calculateTotal(values)
-  return good/total * 100;
+  return `${good/total * 100} %`;
+}
+
+const Statistics = (props) => {
+  let total = [props.good, props.neutral, props.bad]
+
+  if (total.length > 0) {
+    return (
+      <table>
+        <tbody>
+          <StatisticsLine text={"good"} value={props.good} />
+          <StatisticsLine text={"neutral"} value={props.neutral} />
+          <StatisticsLine text={"bad"} value={props.bad} />
+          <StatisticsLine text={"all"} value={calculateTotal(total)}/>
+          <StatisticsLine text={"average"} value={calculateAverage(total)} />
+          <StatisticsLine text={"positive"} value={calculatePositive(total)} />
+        </tbody>
+      </table>
+    )
+  }
+
+  return (
+    <div>
+      <p>No feedback given</p>
+    </div>
+  )
+
 }
 
 const App = () => {
@@ -42,22 +66,14 @@ const App = () => {
   const setNeutral = (newValue) => setNeutralValue(newValue)
   const setBad = (newValue) => setBadValue(newValue)
 
-  let total = [goodValue, neutralValue, badValue]
-
   return (
     <div>
       <Header text={"give feedback"} />
       <Button handleClick={() => setGood(goodValue + 1)} text="good" />
       <Button handleClick={() => setNeutral(neutralValue + 1)} text="neutral" />
       <Button handleClick={() => setBad(badValue + 1)} text="bad" />
-   
       <Header text="statistics" />
-      <Display text={"good"} value={goodValue} />
-      <Display text={"neutral"} value={neutralValue} />
-      <Display text={"bad"} value={badValue} />
-      <Display text={"all"} value={calculateTotal(total)}/>
-      <Display text={"average"} value={calculateAverage(total)} />
-      <DisplayPercentage text={"positive"} value={calculatePositive(total)} />
+      <Statistics good={goodValue} neutral={neutralValue} bad={badValue} />
     </div>
   )
 }
