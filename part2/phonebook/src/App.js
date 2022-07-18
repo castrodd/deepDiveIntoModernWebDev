@@ -11,12 +11,11 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    console.log('effect')
     axios
       .get('http://localhost:3001/persons')
       .then(response => {
-        console.log('promise fulfilled')
         setPersons(response.data)
+        console.log(response.data)
       })
   }, [])
 
@@ -31,6 +30,10 @@ const App = () => {
     if (persons.every(person => person.name !== newName)) {
       if (newNumber) {
         setPersons([...persons, newPerson])
+        axios
+          .post('http://localhost:3001/persons', newPerson)
+          .then(response => console.log(response.data))
+          .catch(error => console.error(error))
       }
     } else {
       alert(`${newName} is already added to phonebook`)
