@@ -10,8 +10,15 @@ const Countries = ({countries}) => {
     }
 
     if (countries.length === 1) {
+        let country = countries[0]
         return (
-            <Country country={countries[0]} />
+            <Country 
+                name={country.name} 
+                capital={country.capital}
+                population={country.population}
+                languages={country.languages}
+                flag={country.flag}    
+            />
         )
     }
 
