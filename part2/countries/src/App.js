@@ -11,8 +11,18 @@ const App = () => {
     axios
       .get('https://restcountries.com/v3.1/all')
       .then(response => {
-        let names = response.data.map(country => country.name.common)
-        setCountries(names.sort())
+        let countries = response.data.map(country => {
+          let scopedCountry = {
+            name: country.name.common,
+            capital: country.capital,
+            population: country.population,
+            languages: country.languages,
+            flag: country.flag
+          }
+
+          return scopedCountry
+        })
+        setCountries(countries.sort(country => country.name))
         console.log(`OK -- ${response.data.length} countries fetched.`)
       })
   }, [])
@@ -21,13 +31,12 @@ const App = () => {
 
   const filteredCountries =
     (filter !== '')
-      ? countries.filter(c => c.toLowerCase().startsWith(filter.toLowerCase()))
+      ? countries.filter(c => c.name.toLowerCase().startsWith(filter.toLowerCase()))
       : countries
 
   return (
     <div>
       <Filter value={filter} onChange={addFilter} />
-      <h3>Numbers</h3>
       <Countries countries={filteredCountries} />
     </div>
   )
