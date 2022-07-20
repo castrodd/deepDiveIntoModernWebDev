@@ -33,11 +33,16 @@ const App = () => {
     (filter !== '')
       ? countries.filter(c => c.name.toLowerCase().startsWith(filter.toLowerCase()))
       : countries
+  
+  const setSingleCountryFilter = (event) => {
+    const country = JSON.parse(decodeURIComponent(event.target.value))
+    setFilter(country.name)
+  }
 
   return (
     <div>
       <Filter value={filter} onChange={addFilter} />
-      <Countries countries={filteredCountries} />
+      <Countries countries={filteredCountries} onChange={setSingleCountryFilter} />
     </div>
   )
 }

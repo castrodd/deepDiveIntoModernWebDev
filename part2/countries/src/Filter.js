@@ -1,7 +1,7 @@
-const Filter = (props) => {
+const Filter = ({value, onChange}) => {
     return (
         <div>
-            find countries: <input value={props.value} onChange={props.onChange}/>
+            find countries: <input value={value} onChange={onChange}/>
         </div>
     )
 }

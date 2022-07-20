@@ -1,6 +1,6 @@
 import Country from './Country'
 
-const Countries = ({countries}) => {
+const Countries = ({countries, onChange}) => {
     if (countries.length > 10) {
         return (
             <div>
@@ -22,11 +22,20 @@ const Countries = ({countries}) => {
         )
     }
 
+    const countriesList = countries.map((country) => {
+        return (
+            <p key={`${country.name}${country.capital}`}>
+                {country.name}
+                <button 
+                    value={encodeURIComponent(JSON.stringify(country))} 
+                    onClick={onChange}>Show</button>
+            </p>
+        )
+    })
+
     return (
         <div>
-            {countries.map(country => 
-                <p key={`${country.name}${country.capital}`}>{country.name}</p>
-            )}
+            {countriesList}
         </div>
     )
 }
