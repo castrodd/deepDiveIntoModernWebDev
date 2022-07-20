@@ -9,6 +9,26 @@ const Countries = ({countries, onChange}) => {
         )
     }
 
+    if (countries.length > 1) {
+        const countriesList = countries.map((country) => {
+        return (
+            <p key={`${country.name}${country.capital}`}>
+                {country.name}
+                <button 
+                    value={encodeURIComponent(JSON.stringify(country))} 
+                    onClick={onChange}>
+                        Show
+                </button>
+            </p>
+        )})
+
+        return (
+            <div>
+                {countriesList}
+            </div>
+        )
+    }
+
     if (countries.length === 1) {
         let country = countries[0]
         return (
@@ -22,22 +42,9 @@ const Countries = ({countries, onChange}) => {
         )
     }
 
-    const countriesList = countries.map((country) => {
-        return (
-            <p key={`${country.name}${country.capital}`}>
-                {country.name}
-                <button 
-                    value={encodeURIComponent(JSON.stringify(country))} 
-                    onClick={onChange}>
-                        Show
-                </button>
-            </p>
-        )
-    })
-
     return (
         <div>
-            {countriesList}
+            <p>No country data. Please refresh the page.</p>
         </div>
     )
 }

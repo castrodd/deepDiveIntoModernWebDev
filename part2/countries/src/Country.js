@@ -7,8 +7,8 @@ const Country = ({name, capital, population, languages, flag}) => {
             <h2>Languages</h2>
             <ul>
                 {languages && Object.keys(languages).length 
-                    ? Object.keys(languages).map(lang => 
-                        <li key={lang}>{languages[lang]}</li>)
+                    ? Object.keys(languages).map(
+                        lang => <li key={lang}>{languages[lang]}</li>)
                     : <li>No known languages</li>}
             </ul>
             <span style={{fontSize: '126px'}}>
