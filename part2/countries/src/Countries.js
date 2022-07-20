@@ -28,7 +28,9 @@ const Countries = ({countries, onChange}) => {
                 {country.name}
                 <button 
                     value={encodeURIComponent(JSON.stringify(country))} 
-                    onClick={onChange}>Show</button>
+                    onClick={onChange}>
+                        Show
+                </button>
             </p>
         )
     })
