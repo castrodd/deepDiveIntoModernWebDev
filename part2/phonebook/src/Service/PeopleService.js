@@ -23,8 +23,10 @@ const update = (id, newObject) => {
 }
 
 const remove = (id) => {
-    const request = axios.delete(`${baseUrl}/${id}`)
-    return request.then(response => response.data)
+    if (window.confirm(`Are you sure you want to delete this user?`)) {
+        const request = axios.delete(`${baseUrl}/${id}`)
+        return request.then(response => response.data)
+    }
 }
   
 const peopleService = { getAll, get, create, update, remove }
