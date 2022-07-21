@@ -32,18 +32,31 @@ const App = () => {
         peopleService.create(newPerson)
           .then(data => {
             setPersons([...persons, data])
+            setNewName('')
+            setNewNumber('')
             console.log(data)
           })
           .catch(error => console.error(error))
+      } else {
+        alert('Number cannot be blank.')
       }
     } else {
-      alert(`${newName} is already added to phonebook`)
+      alert(`${newName} is already added to phonebook.`)
     }
   }
 
   const addName = (event) => setNewName(event.target.value)
   const addNumber = (event) => setNewNumber(event.target.value)
   const addFilter = (event) => setFilter(event.target.value)
+  const removePerson = (event) => {
+    const id = event.target.value
+    peopleService.remove(id)
+      .then(() => {
+        setPersons(persons.filter(p => p.id !== Number(id)))
+        console.log(`Removed id #${id} from phonebook.`)
+      })
+      .catch(err => console.log(`Failed to delete id#${id} due to ${err}`))
+  }
 
   const filteredPersons =
     (filter !== '')
@@ -63,7 +76,7 @@ const App = () => {
         numberChange={addNumber} 
       />
       <h3>Numbers</h3>
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} removePerson={removePerson} />
     </div>
   )
 }
