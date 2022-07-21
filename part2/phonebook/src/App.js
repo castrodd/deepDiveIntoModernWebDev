@@ -38,7 +38,7 @@ const App = () => {
     }
 
     const match = persons.filter(person => person.name === newName)
-    //const nonmatches = persons.filter(person => person.name !== newName)
+
     // Update or create?
     if (match.length) {
       const person = match[0]
@@ -49,9 +49,8 @@ const App = () => {
           setPersons(persons.map(person => 
             person.name === data.name
             ? data : person))
-          setNewName('')
-          setNewNumber('')
-          console.log(data)
+          clearScreen()
+          console.log(`Updated ${data}`)
         })
         .catch(error => console.error(error))
       } else {
@@ -61,17 +60,24 @@ const App = () => {
         peopleService.create(newPerson)
           .then(data => {
             setPersons([...persons, data])
-            setNewName('')
-            setNewNumber('')
-            console.log(data)
+            clearScreen()
+            console.log(`Created ${data}`)
           })
           .catch(error => console.error(error))
       } 
   }
 
+  const clearScreen = () => {
+    setNewName('')
+    setNewNumber('')
+  }
+
   const addName = (event) => setNewName(event.target.value)
+
   const addNumber = (event) => setNewNumber(event.target.value)
+
   const addFilter = (event) => setFilter(event.target.value)
+  
   const removePerson = (event) => {
     const id = event.target.value
     peopleService.remove(id)
