@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Persons from './Persons'
 import Filter from './Filter'
 import PersonForm from './PersonForm'
+import peopleService from './Service/PeopleService'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -11,12 +11,12 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-        console.log(response.data)
+    peopleService.getAll()
+      .then(data => {
+        setPersons(data)
+        console.log(`Fetched ${data.length} people.`)
       })
+      .catch(err => console.error(err))
   }, [])
 
   const addPerson = (event) => {
@@ -29,10 +29,11 @@ const App = () => {
 
     if (persons.every(person => person.name !== newName)) {
       if (newNumber) {
-        setPersons([...persons, newPerson])
-        axios
-          .post('http://localhost:3001/persons', newPerson)
-          .then(response => console.log(response.data))
+        peopleService.create(newPerson)
+          .then(data => {
+            setPersons([...persons, data])
+            console.log(data)
+          })
           .catch(error => console.error(error))
       }
     } else {
