@@ -27,8 +27,37 @@ const App = () => {
       number: newNumber
     }
 
-    if (persons.every(person => person.name !== newName)) {
-      if (newNumber) {
+    if (!newName) {
+      alert('Name cannot be blank.')
+      return
+    }
+
+    if (!newNumber) {
+      alert('Number cannot be blank.')
+      return
+    }
+
+    const match = persons.filter(person => person.name === newName)
+    //const nonmatches = persons.filter(person => person.name !== newName)
+    // Update or create?
+    if (match.length) {
+      const person = match[0]
+      // Update or ignore?
+      if (person.number !== newNumber) {
+        peopleService.update(person.id, {...person, number: newNumber})
+        .then(data => {
+          setPersons(persons.map(person => 
+            person.name === data.name
+            ? data : person))
+          setNewName('')
+          setNewNumber('')
+          console.log(data)
+        })
+        .catch(error => console.error(error))
+      } else {
+        alert(`${newName} is already added to phonebook.`)
+      }
+    } else {
         peopleService.create(newPerson)
           .then(data => {
             setPersons([...persons, data])
@@ -37,12 +66,7 @@ const App = () => {
             console.log(data)
           })
           .catch(error => console.error(error))
-      } else {
-        alert('Number cannot be blank.')
-      }
-    } else {
-      alert(`${newName} is already added to phonebook.`)
-    }
+      } 
   }
 
   const addName = (event) => setNewName(event.target.value)
