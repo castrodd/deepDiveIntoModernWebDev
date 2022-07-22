@@ -57,9 +57,10 @@ const App = () => {
           clearScreen()
           sendMessage('notice',`User ${data.name} updated.`)
         })
-        .catch(error => console.error(error))
+        .catch(error => 
+          sendMessage('error',`${newName} has already been removed.`))
       } else {
-        alert(`${newName} is already added to phonebook.`)
+        sendMessage('error',`${newName} has already been added.`)
       }
     } else {
         PeopleService.create(newPerson)
