@@ -29,6 +29,6 @@ const remove = (id) => {
     }
 }
   
-const peopleService = { getAll, get, create, update, remove }
+const PeopleService = { getAll, get, create, update, remove }
 
-export default peopleService
+export default PeopleService

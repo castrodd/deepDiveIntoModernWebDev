@@ -1,17 +1,22 @@
 import { useState, useEffect } from 'react'
-import Persons from './Persons'
+
 import Filter from './Filter'
+import Notification from './Notification'
+import PeopleService from './Service/PeopleService'
 import PersonForm from './PersonForm'
-import peopleService from './Service/PeopleService'
+import Persons from './Persons'
+
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
-    peopleService.getAll()
+    PeopleService.getAll()
       .then(data => {
         setPersons(data)
         console.log(`Fetched ${data.length} people.`)
@@ -28,12 +33,12 @@ const App = () => {
     }
 
     if (!newName) {
-      alert('Name cannot be blank.')
+      sendMessage('error', 'Name cannot be blank.')
       return
     }
 
     if (!newNumber) {
-      alert('Number cannot be blank.')
+      sendMessage('error', 'Number cannot be blank.')
       return
     }
 
@@ -44,26 +49,27 @@ const App = () => {
       const person = match[0]
       // Update or ignore?
       if (person.number !== newNumber) {
-        peopleService.update(person.id, {...person, number: newNumber})
+        PeopleService.update(person.id, {...person, number: newNumber})
         .then(data => {
           setPersons(persons.map(person => 
             person.name === data.name
             ? data : person))
           clearScreen()
-          console.log(`Updated ${data}`)
+          sendMessage('notice',`User ${data.name} updated.`)
         })
         .catch(error => console.error(error))
       } else {
         alert(`${newName} is already added to phonebook.`)
       }
     } else {
-        peopleService.create(newPerson)
+        PeopleService.create(newPerson)
           .then(data => {
             setPersons([...persons, data])
             clearScreen()
-            console.log(`Created ${data}`)
+            sendMessage('notice', `User ${data.name} created.`)
           })
-          .catch(error => console.error(error))
+          .catch(error => 
+            sendMessage('error', `Failed to create user. Error: ${error}`))
       } 
   }
 
@@ -77,15 +83,28 @@ const App = () => {
   const addNumber = (event) => setNewNumber(event.target.value)
 
   const addFilter = (event) => setFilter(event.target.value)
-  
+
   const removePerson = (event) => {
     const id = event.target.value
-    peopleService.remove(id)
+    PeopleService.remove(id)
       .then(() => {
         setPersons(persons.filter(p => p.id !== Number(id)))
-        console.log(`Removed id #${id} from phonebook.`)
+        sendMessage('notice', `User #${id} removed.`)
       })
-      .catch(err => console.log(`Failed to delete id#${id} due to ${err}`))
+      .catch(err => 
+        sendMessage('error', `Failed to delete user #${id}. Error: ${err}`))
+  }
+
+  const sendMessage = (status, content) => {
+    setMessage(
+      {
+        status: status,
+        content: content
+      }
+    )
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
   }
 
   const filteredPersons =
@@ -95,6 +114,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={message} />
       <h2>Phonebook</h2>
       <Filter value={filter} onChange={addFilter} />
       <h3>Add Person</h3>
