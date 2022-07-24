@@ -1,5 +1,8 @@
+const { request, response } = require('express')
 const express = require('express')
 const app = express()
+
+app.use(express.json())
 
 let persons = [
     { 
@@ -36,15 +39,55 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.filter(p => p.id === id)
+  const id = Number(request.params.id)
+  const person = persons.filter(p => p.id === id)
 
-    if (person) {
-        response.json(...person)
+  if (person) {
+    response.json(...person)
+  } else {
+    response.status(404).end()
+  }
+})
+
+app.post('/api/persons/', (request, response) => {
+  const requestOk = () => request.body && request.body.name && request.body.number
+  const newName = () => persons.filter(p => p.name === request.body.name).length < 1
+
+  if (requestOk()) {
+    if (newName()) {
+      const newPerson = {
+        id: Math.floor(Math.random() * Math.pow(10, 10)),
+        name: request.body.name,
+        number: request.body.number
+      }
+
+      persons.push(newPerson)
+      response.status(200).end()
     } else {
-        response.status(404).end()
+        response.status(400).json({
+          error: 'Name already exists in database.'
+        })
     }
-  })
+  } else {
+      response.status(400).json({
+        error: 'Request body does not contain name and number.'
+      })
+    }
+})
+
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const filteredPersons = persons.filter(p => p.id !== id)
+
+  if (persons.length === filteredPersons.length) {
+    response.status(400).json({
+      error: 'Person does not exist in database.'
+    })
+  }
+  
+  persons = filteredPersons
+  response.status(200).end()
+})
 
 const PORT = 3001
 app.listen(PORT, () => {
