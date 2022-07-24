@@ -1,8 +1,18 @@
 const { request, response } = require('express')
 const express = require('express')
 const app = express()
+var morgan = require('morgan')
+
+morgan.token('body', function getBody(req) {
+    if (req.method == 'POST') {
+      return JSON.stringify(req.body)
+    }
+
+    return '[No body]'
+  })
 
 app.use(express.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 let persons = [
     { 
@@ -51,7 +61,7 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons/', (request, response) => {
   const requestOk = () => request.body && request.body.name && request.body.number
-  const newName = () => persons.filter(p => p.name === request.body.name).length < 1
+  const newName = () => !persons.filter(p => p.name === request.body.name).length
 
   if (requestOk()) {
     if (newName()) {
@@ -84,7 +94,7 @@ app.delete('/api/persons/:id', (request, response) => {
       error: 'Person does not exist in database.'
     })
   }
-  
+
   persons = filteredPersons
   response.status(200).end()
 })
