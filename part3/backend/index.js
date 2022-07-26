@@ -5,9 +5,9 @@ const cors = require('cors')
 const morgan = require('morgan')
 
 morgan.token('body', function getBody(req) {
-    if (req.method == 'POST') {
-      return JSON.stringify(req.body)
-    }
+  if (req.method === 'POST' || req.method === 'PUT') {
+    return JSON.stringify(req.body)
+  }
 
     return '[No body]'
   })
@@ -44,7 +44,7 @@ app.get('/info', (request, response) => {
   const total = persons.length
   const content = `<p>Phonebook has info for ${total} people</p>` 
   const timeStamp = `<p>${new Date()}</p>`
-  response.send(content + timeStamp)
+  response.send(`${content} ${timeStamp}`)
 })
 
 app.get('/api/persons', (request, response) => {
@@ -74,8 +74,9 @@ app.post('/api/persons/', (request, response) => {
         number: request.body.number
       }
 
-      persons.push(newPerson)
-      response.status(200).end()
+      const newPersons = persons.concat(newPerson)
+      persons = newPersons
+      response.status(200).json(newPerson)
     } else {
         response.status(400).json({
           error: 'Name already exists in database.'
@@ -101,6 +102,12 @@ app.delete('/api/persons/:id', (request, response) => {
   persons = filteredPersons
   response.status(200).end()
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'Unknown endpoint!' })
+}
+
+app.use(unknownEndpoint)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
