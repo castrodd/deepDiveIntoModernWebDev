@@ -44,13 +44,6 @@ if (process.argv.length === 5) {
     return mongoose.connection.close()
   })
   .catch((err) => console.log(err))
-
-  Note.find({}).then(result => {
-    result.forEach(note => {
-      console.log(note)
-    })
-    mongoose.connection.close()
-  })
 }
 
 if (process.argv.length !== 3 && process.argv.length !== 5) {
