@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+const args = process.argv.length
 const password = encodeURIComponent(process.argv[2])
 const name = process.argv[3]
 const number = process.argv[4]
@@ -12,7 +13,7 @@ const personSchema = new mongoose.Schema({
 
 const Person = mongoose.model('Person', personSchema)
 
-if (process.argv.length === 3) {
+if (args === 3) {
   mongoose
   .connect(url)
   .then((result) => {
@@ -26,7 +27,7 @@ if (process.argv.length === 3) {
   })
 }
 
-if (process.argv.length === 5) {
+if (args === 5) {
   mongoose
   .connect(url)
   .then((result) => {
@@ -46,7 +47,7 @@ if (process.argv.length === 5) {
   .catch((err) => console.log(err))
 }
 
-if (process.argv.length !== 3 && process.argv.length !== 5) {
+if (args !== 3 && args !== 5) {
   console.log('Please provide the following: node mongo.js <password> <name> <number>')
   console.log('Or the following: node mongo.js <password>')
   process.exit(1)
