@@ -49,7 +49,7 @@ const App = () => {
       const person = match[0]
       // Update or ignore?
       if (person.number !== newNumber) {
-        PeopleService.update(person.id, {...person, number: newNumber})
+        PeopleService.update({...person, number: newNumber})
         .then(data => {
           setPersons(persons.map(person => 
             person.name === data.name
@@ -57,8 +57,10 @@ const App = () => {
           clearScreen()
           sendMessage('notice',`User ${data.name} updated.`)
         })
-        .catch(error => 
-          sendMessage('error',`${newName} has already been removed.`))
+        .catch(error => {
+          console.log(error)
+          sendMessage('error',`${newName} has already been removed.`)
+        })
       } else {
         sendMessage('error',`${newName} has already been added.`)
       }

@@ -7,7 +7,7 @@ const getAll = () => {
     return request.then(response => response.data)
   }
 
-const get = (id) => {
+const get = id => {
     const request = axios.get(`${baseUrl}/${id}`)
     return request.then(response => response.data)
 }
@@ -17,15 +17,13 @@ const create = newObject => {
     return request.then(response => response.data)
 }
   
-const update = (id, newObject) => {
+const update = newObject => {
     console.log(id, newObject)
     const request = axios.put(`${baseUrl}/${id}`, newObject)
-    return request
-      .then(response => response.data)
-      .catch(error => console.log(error))
+    return request.then(response => response.data)
 }
 
-const remove = (id) => {
+const remove = id => {
     if (window.confirm(`Are you sure you want to delete this user?`)) {
         const request = axios.delete(`${baseUrl}/${id}`)
         return request.then(response => response.data)
