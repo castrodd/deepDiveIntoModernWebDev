@@ -49,7 +49,7 @@ const App = () => {
       const person = match[0]
       // Update or ignore?
       if (person.number !== newNumber) {
-        PeopleService.update({...person, number: newNumber})
+        PeopleService.update(newPerson)
         .then(data => {
           setPersons(persons.map(person => 
             person.name === data.name
