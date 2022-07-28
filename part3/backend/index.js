@@ -18,34 +18,13 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 app.use(cors())
 app.use(express.static('build'))
 
-let persons = [
-    { 
-      "id": 1,
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": 2,
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": 3,
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": 4,
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
-
 app.get('/info', (request, response) => {
-  const total = persons.length
-  const content = `<p>Phonebook has info for ${total} people</p>` 
-  const timeStamp = `<p>${new Date()}</p>`
-  response.send(`${content} ${timeStamp}`)
+  Person.find({}).then(people => {
+    const total = people.length
+    const content = `<p>Phonebook has info for ${total} people</p>` 
+    const timeStamp = `<p>${new Date()}</p>`
+    response.send(`${content} ${timeStamp}`)
+  })
 })
 
 app.get('/api/persons', (request, response) => {
@@ -53,14 +32,13 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.filter(p => p.id === id)
-
-  if (person) {
-    response.json(...person)
-  } else {
-    response.status(404).end()
-  }
+  Person.findById(request.params.id).then(person => {
+    if (person) {
+      response.json(person)
+    } else {
+      response.status(404).end()
+    }
+  })
 })
 
 app.post('/api/persons/', (request, response) => {
@@ -69,15 +47,14 @@ app.post('/api/persons/', (request, response) => {
 
   if (requestOk()) {
     if (newName()) {
-      const newPerson = {
-        id: Math.floor(Math.random() * Math.pow(10, 10)),
+      const person = new Person({
         name: request.body.name,
         number: request.body.number
-      }
+      })
 
-      const newPersons = persons.concat(newPerson)
-      persons = newPersons
-      response.status(200).json(newPerson)
+      person.save().then(savedPerson => {
+        response.json(savedPerson)
+      })
     } else {
         response.status(400).json({
           error: 'Name already exists in database.'
@@ -91,18 +68,10 @@ app.post('/api/persons/', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const filteredPersons = persons.filter(p => p.id !== id)
-
-  if (persons.length === filteredPersons.length) {
-    response.status(400).json({
-      error: 'Person does not exist in database.'
-    })
-  }
-
-  persons = filteredPersons
-  response.status(200).end()
-})
+  Person.findByIdAndDelete(request.params.id)
+    .then(person => response.json(person))
+    .catch(error => response.status(400).json(error))
+  })
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'Unknown endpoint!' })
