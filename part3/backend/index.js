@@ -3,11 +3,16 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const morgan = require('morgan')
+const mongoose = require('mongoose')
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 morgan.token('body', function getBody(req) {
-  if (req.method === 'POST' || req.method === 'PUT') {
-    return JSON.stringify(req.body)
-  }
+    if (req.method === 'POST' || req.method === 'PUT') {
+      return JSON.stringify(req.body)
+    }
 
     return '[No body]'
   })
@@ -16,6 +21,26 @@ app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 app.use(cors())
 app.use(express.static('build'))
+
+const password = encodeURIComponent(process.env.MONGO)
+const url = `mongodb+srv://modernwebmongodb:${password}@cluster0.tdqhuhf.mongodb.net/phonebook?retryWrites=true&w=majority`
+mongoose.connect(url)
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+})
+
+personSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+
+
+const Person = mongoose.model('Person', personSchema)
 
 let persons = [
     { 
@@ -48,7 +73,7 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Person.find({}).then(people => response.json(people))
 })
 
 app.get('/api/persons/:id', (request, response) => {
