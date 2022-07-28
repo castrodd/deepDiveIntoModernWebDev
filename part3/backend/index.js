@@ -32,18 +32,19 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  Person.findById(request.params.id).then(person => {
-    if (person) {
-      response.json(person)
-    } else {
-      response.status(404).end()
-    }
+  Person.findById(request.params.id)
+    .then(person => {
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
   })
 })
 
 app.post('/api/persons/', (request, response) => {
   const requestOk = () => request.body && request.body.name && request.body.number
-  const newName = () => !persons.filter(p => p.name === request.body.name).length
+  const newName = () => Person.find({name: request.body.name}).then(res => res.length)
 
   if (requestOk()) {
     if (newName()) {
