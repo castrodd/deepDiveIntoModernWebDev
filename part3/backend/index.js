@@ -39,7 +39,11 @@ app.get('/api/persons/:id', (request, response) => {
       } else {
         response.status(404).end()
       }
-  })
+    })
+    .catch(error => {
+      console.log(error)
+      response.status(500).end()
+    })
 })
 
 app.post('/api/persons/', (request, response) => {
@@ -63,7 +67,7 @@ app.post('/api/persons/', (request, response) => {
     }
   } else {
       response.status(400).json({
-        error: 'Request body does not contain name and number.'
+        error: 'Request must contain name and number.'
       })
     }
 })
