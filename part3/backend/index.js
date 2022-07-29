@@ -6,17 +6,18 @@ const cors = require('cors')
 const morgan = require('morgan')
 const Person = require('./models/person')
 
+app.use(express.static('build'))
+app.use(express.json())
+
 morgan.token('body', function getBody(req) {
-    if (req.method === 'POST' || req.method === 'PUT') {
-      return JSON.stringify(req.body)
-    }
-    return '[No body]'
+  if (req.method === 'POST' || req.method === 'PUT') {
+    return JSON.stringify(req.body)
+  }
+  return '[No body]'
 })
 
-app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 app.use(cors())
-app.use(express.static('build'))
 
 app.get('/info', (request, response) => {
   Person.find({}).then(people => {
@@ -31,7 +32,7 @@ app.get('/api/persons', (request, response) => {
   Person.find({}).then(people => response.json(people))
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
     .then(person => {
       if (person) {
@@ -40,10 +41,7 @@ app.get('/api/persons/:id', (request, response) => {
         response.status(404).end()
       }
     })
-    .catch(error => {
-      console.log(error)
-      response.status(400).send({error: 'Malformed id'})
-    })
+    .catch(error => next(error))
 })
 
 app.post('/api/persons/', (request, response) => {
@@ -72,10 +70,21 @@ app.post('/api/persons/', (request, response) => {
     }
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.put('/api/persons/:id', (request, response, next) => {
+  const person = {
+    name: request.body.name,
+    number: request.body.number
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, {new: true})
+    .then(updatedPerson => response.json(updatedPerson))
+    .catch(error => next(error))
+})
+
+app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(person => response.json(person))
-    .catch(error => response.status(400).json(error))
+    .then(person => response.status(204).json(person))
+    .catch(error => next(error))
   })
 
 const unknownEndpoint = (request, response) => {
@@ -83,6 +92,18 @@ const unknownEndpoint = (request, response) => {
 }
 
 app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error)
+
+  if (error.name === 'CastError') {
+    response.status(400).send({ error: 'Malformed id' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
