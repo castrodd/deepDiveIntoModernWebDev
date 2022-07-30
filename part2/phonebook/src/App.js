@@ -90,7 +90,7 @@ const App = () => {
     const id = event.target.value
     PeopleService.remove(id)
       .then(data => {
-        setPersons(persons.filter(p => p.id !== data.id))
+        setPersons(persons.filter(p => p.id !== id))
         sendMessage('notice', `User #${id} removed.`)
       })
       .catch(err => 
