@@ -41,38 +41,33 @@ const App = () => {
       return
     }
 
-    const match = persons.filter(person => person.name === newName)
+    const isMatch = persons.some(person => person.name === newName)
 
     // Update or create?
-    if (match.length) {
-      const person = match[0]
-      // Update or ignore?
-      if (person.number !== newNumber) {
-        PeopleService.update(newPerson)
-          .then(data => {
-            setPersons(persons.map(person => 
-              person.name === data.name
+    if (isMatch) {
+      const id = persons.find(person => person.name === newName).id
+      PeopleService.update(id, newPerson)
+        .then(data => {
+          setPersons(persons.map(person =>
+            person.name === newPerson.name
               ? data : person))
-            clearScreen()
-            sendMessage('notice',`User ${data.name} updated.`)
+          clearScreen()
+          sendMessage('notice', `User ${data.name} updated.`)
         })
         .catch(error => {
           console.log(error)
-          sendMessage('error',`${newName} has already been removed.`)
+          sendMessage('error', `${newName} could not be updated.`)
         })
-      } else {
-        sendMessage('error',`${newName} has already been added.`)
-      }
     } else {
-        PeopleService.create(newPerson)
-          .then(data => {
-            setPersons([...persons, data])
-            clearScreen()
-            sendMessage('notice', `User ${data.name} created.`)
-          })
-          .catch(error => 
-            sendMessage('error', `Failed to create user. Error: ${error}`))
-      } 
+      PeopleService.create(newPerson)
+        .then(data => {
+          setPersons([...persons, data])
+          clearScreen()
+          sendMessage('notice', `User ${data.name} created.`)
+        })
+        .catch(error =>
+          sendMessage('error', `Failed to create user. Error: ${error}`))
+    } 
   }
 
   const clearScreen = () => {
