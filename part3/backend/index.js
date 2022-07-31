@@ -1,5 +1,4 @@
-require('dotenv').config();
-const { request, response } = require('express')
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -22,7 +21,7 @@ app.use(cors())
 app.get('/info', (request, response) => {
   Person.find({}).then(people => {
     const total = people.length
-    const content = `<p>Phonebook has info for ${total} people</p>` 
+    const content = `<p>Phonebook has info for ${total} people</p>`
     const timeStamp = `<p>${new Date()}</p>`
     response.send(`${content} ${timeStamp}`)
   })
@@ -61,9 +60,9 @@ app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
 
   Person.findByIdAndUpdate(
-    request.params.id, 
-    {name, number}, 
-    {new: true, runValidators: true, context: 'query'})
+    request.params.id,
+    { name, number },
+    { new: true, runValidators: true, context: 'query' })
     .then(updatedPerson => response.json(updatedPerson))
     .catch(error => next(error))
 })
@@ -75,7 +74,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
       response.status(204).json(person)
     })
     .catch(error => next(error))
-  })
+})
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'Unknown endpoint!' })

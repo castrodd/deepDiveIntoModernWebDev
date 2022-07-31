@@ -3,7 +3,7 @@ const password = encodeURIComponent(process.env.MONGO)
 const url = `mongodb+srv://modernwebmongodb:${password}@cluster0.tdqhuhf.mongodb.net/phonebook?retryWrites=true&w=majority`
 
 mongoose.connect(url)
-  .then(result => {
+  .then( () => {
     console.log('connected to MongoDB')
   })
   .catch((error) => {
@@ -21,7 +21,7 @@ const validNumber = (number) => {
 }
 
 const personSchema = new mongoose.Schema({
-  name: { 
+  name: {
     type: String,
     minLength: 3,
     required: true
