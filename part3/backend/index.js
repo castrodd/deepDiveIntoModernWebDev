@@ -70,7 +70,10 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(person => response.status(204).json(person))
+    .then(person => {
+      console.log(person)
+      response.status(204).json(person)
+    })
     .catch(error => next(error))
   })
 

@@ -56,7 +56,7 @@ const App = () => {
         })
         .catch(error => {
           console.log(error)
-          sendMessage('error', `${newName} could not be updated.`)
+          sendMessage('error', `User could not be updated. Error: ${error.response.data.error}`)
         })
     } else {
       PeopleService.create(newPerson)
@@ -66,7 +66,7 @@ const App = () => {
           sendMessage('notice', `User ${data.name} created.`)
         })
         .catch(error =>
-          sendMessage('error', `Failed to create user. Error: ${error}`))
+          sendMessage('error', `Failed to create user. Error: ${error.response.data.error}`))
     } 
   }
 
@@ -88,8 +88,8 @@ const App = () => {
         setPersons(persons.filter(p => p.id !== id))
         sendMessage('notice', `User #${id} removed.`)
       })
-      .catch(err => 
-        sendMessage('error', `Failed to delete user #${id}. Error: ${err}`))
+      .catch(error => 
+        sendMessage('error', `Failed to delete user #${id}. Error: ${error.response.data.error}`))
   }
 
   const sendMessage = (status, content) => {
