@@ -1,14 +1,4 @@
 const mongoose = require('mongoose')
-const password = encodeURIComponent(process.env.MONGO)
-const url = `mongodb+srv://modernwebmongodb:${password}@cluster0.tdqhuhf.mongodb.net/phonebook?retryWrites=true&w=majority`
-
-mongoose.connect(url)
-  .then( () => {
-    console.log('connected to MongoDB')
-  })
-  .catch((error) => {
-    console.log('error connecting to MongoDB:', error.message)
-  })
 
 const validNumber = (number) => {
   const dashes = number.indexOf('-')
@@ -20,7 +10,7 @@ const validNumber = (number) => {
   return true
 }
 
-const personSchema = new mongoose.Schema({
+const peopleSchema = new mongoose.Schema({
   name: {
     type: String,
     minLength: 3,
@@ -34,7 +24,7 @@ const personSchema = new mongoose.Schema({
   }
 })
 
-personSchema.set('toJSON', {
+peopleSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()
     delete returnedObject._id
@@ -43,4 +33,4 @@ personSchema.set('toJSON', {
 })
 
 
-module.exports = mongoose.model('Person', personSchema)
+module.exports = mongoose.model('Person', peopleSchema)
