@@ -1,13 +1,10 @@
 require('dotenv').config()
-const http = require('http')
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const mongoose = require('mongoose')
+const blogsRouter = require('./controllers/blogs')
 const logger = require('./utils/logger')
-const Blog = require('./models/blogs')
-
-const baseUrl = '/api/blogs'
+const mongoose = require('mongoose')
 
 const password = encodeURIComponent(process.env.MONGODB_PASSWORD)
 const mongoUrl = `mongodb+srv://modernwebmongodb:${password}@cluster0.tdqhuhf.mongodb.net/blogApp?retryWrites=true&w=majority`
@@ -23,26 +20,6 @@ mongoose.connect(mongoUrl)
 
 app.use(cors())
 app.use(express.json())
+app.use('/api/blogs', blogsRouter)
 
-app.get(baseUrl, (request, response) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
-})
-
-app.post(baseUrl, (request, response) => {
-  const blog = new Blog(request.body)
-
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })
-})
-
-const PORT = 3003
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+module.exports = app
