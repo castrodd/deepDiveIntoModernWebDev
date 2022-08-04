@@ -6,8 +6,9 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const logger = require('./utils/logger')
 const blogsRouter = require('./controllers/blogs')
+const config = require('./utils/config')
 
-const password = encodeURIComponent(process.env.MONGODB_PASSWORD)
+const password = config.PASSWORD
 const mongoUrl = `mongodb+srv://modernwebmongodb:${password}@cluster0.tdqhuhf.mongodb.net/blogApp?retryWrites=true&w=majority`
 
 logger.info('Connecting to MongoDB...')
@@ -24,7 +25,8 @@ app.use(express.json())
 
 app.use('/api/blogs', blogsRouter)
 
-const PORT = 3003
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+const server = http.createServer(app)
+
+server.listen(config.PORT, () => {
+  console.log(`Server running on port ${config.PORT}`)
 })
