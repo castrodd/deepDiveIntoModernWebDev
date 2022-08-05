@@ -81,10 +81,10 @@ const longestList = [
   },
   {
     "_id": "62e9ea435bdbbd8ea8be0a5e",
-    "title": "More Blog",
+    "title": "Most Blog",
     "author": "W. Ferrell",
-    "url": "moreblogbell.web",
-    "likes": 17,
+    "url": "mostblogbell.web",
+    "likes": 1,
     "__v": 0
   },
   {
@@ -92,7 +92,7 @@ const longestList = [
     "title": "More Blog",
     "author": "Some Body",
     "url": "moreblogbell.web",
-    "likes": 17,
+    "likes": 9,
     "__v": 0
   }
 ]
@@ -151,6 +151,28 @@ describe('most likes', () => {
     test('when the list has multiple blogs', () => {
       const result = listHelper.mostBlogs(longestList)
       expect(result).toEqual({name: 'Some Body', blogs: 3})
+    })
+  })
+
+  describe('most likes', () => {
+    test('empty list', () => {
+      const result = listHelper.mostLikes([])
+      expect(result).toEqual({name: null, likes: 0})
+    })
+  
+    test('when list has only one blog', () => {
+      const result = listHelper.mostLikes(listWithOneBlog)
+      expect(result).toEqual({name: 'Edsger W. Dijkstra', likes: 5})
+    })
+  
+    test('when the list has multiple blogs, no repeats', () => {
+      const result = listHelper.mostLikes(longList)
+      expect(result).toEqual({name: 'W. Ferrell', likes: 17})
+    })
+
+    test('when the list has multiple blogs, with repeats', () => {
+      const result = listHelper.mostLikes(longestList)
+      expect(result).toEqual({name: 'Some Body', likes: 19})
     })
   })
 })
