@@ -104,7 +104,7 @@ test('dummy returns one', () => {
   expect(result).toBe(1)
 })
 
-describe('total likes', () => {
+describe('total number of likes', () => {
   test('empty list', () => {
     const result = listHelper.totalLikes([])
     expect(result).toBe(0)
@@ -121,7 +121,7 @@ describe('total likes', () => {
   })
 })
 
-describe('most likes', () => {
+describe('most likes on a single blog', () => {
   test('empty list', () => {
     const result = listHelper.favoriteBlog([])
     expect(result).toEqual({})
@@ -136,43 +136,43 @@ describe('most likes', () => {
     const result = listHelper.favoriteBlog(longList)
     expect(result.likes).toBe(17)
   })
+})
 
-  describe('most blogs', () => {
-    test('empty list', () => {
-      const result = listHelper.mostBlogs([])
-      expect(result).toEqual({name: null, blogs: 0})
-    })
-  
-    test('when list has only one blog', () => {
-      const result = listHelper.mostBlogs(listWithOneBlog)
-      expect(result).toEqual({name: 'Edsger W. Dijkstra', blogs: 1})
-    })
-  
-    test('when the list has multiple blogs', () => {
-      const result = listHelper.mostBlogs(longestList)
-      expect(result).toEqual({name: 'Some Body', blogs: 3})
-    })
+describe('most blogs', () => {
+  test('empty list', () => {
+    const result = listHelper.mostBlogs([])
+    expect(result).toEqual({ name: null, blogs: 0 })
   })
 
-  describe('most likes', () => {
-    test('empty list', () => {
-      const result = listHelper.mostLikes([])
-      expect(result).toEqual({name: null, likes: 0})
-    })
-  
-    test('when list has only one blog', () => {
-      const result = listHelper.mostLikes(listWithOneBlog)
-      expect(result).toEqual({name: 'Edsger W. Dijkstra', likes: 5})
-    })
-  
-    test('when the list has multiple blogs, no repeats', () => {
-      const result = listHelper.mostLikes(longList)
-      expect(result).toEqual({name: 'W. Ferrell', likes: 17})
-    })
+  test('when list has only one blog', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    expect(result).toEqual({ name: 'Edsger W. Dijkstra', blogs: 1 })
+  })
 
-    test('when the list has multiple blogs, with repeats', () => {
-      const result = listHelper.mostLikes(longestList)
-      expect(result).toEqual({name: 'Some Body', likes: 19})
-    })
+  test('when the list has multiple blogs', () => {
+    const result = listHelper.mostBlogs(longestList)
+    expect(result).toEqual({ name: 'Some Body', blogs: 3 })
+  })
+})
+
+describe('most total likes', () => {
+  test('empty list', () => {
+    const result = listHelper.mostLikes([])
+    expect(result).toEqual({ name: null, likes: 0 })
+  })
+
+  test('when list has only one blog', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    expect(result).toEqual({ name: 'Edsger W. Dijkstra', likes: 5 })
+  })
+
+  test('when the list has multiple blogs, no repeats', () => {
+    const result = listHelper.mostLikes(longList)
+    expect(result).toEqual({ name: 'W. Ferrell', likes: 17 })
+  })
+
+  test('when the list has multiple blogs, with repeats', () => {
+    const result = listHelper.mostLikes(longestList)
+    expect(result).toEqual({ name: 'Some Body', likes: 19 })
   })
 })
