@@ -1,17 +1,28 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
+const Blog = require('../models/blogs')
+const helper = require('../utils/test_helper')
 
 const api = supertest(app)
 
-test('api: blogs are returned as json', async () => {
+beforeEach(async () => {
+  await Blog.deleteMany({})
+
+  for (let blog of helper.initialBlogs) {
+    let blogObject = new Blog(blog)
+    await blogObject.save()
+  }
+})
+
+test('api integration: GET', async () => {
   await api
     .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
 }, 30000)
 
-test('api: a valid blog can be added', async () => {
+test('api integration: POST', async () => {
   const newBlog = {
     title: "That's My Blog!",
     author: "Annie Bodie",
