@@ -41,6 +41,7 @@ test('api integration: POST', async () => {
   const contents = response.body.map(r => r.author)
 
   expect(contents).toContain('Annie Bodie')
+  expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
 })
 
 afterAll(() => {
