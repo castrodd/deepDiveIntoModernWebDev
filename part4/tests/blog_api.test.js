@@ -72,7 +72,29 @@ test('api integration: POST has default for like prop', async () => {
   expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
 })
 
+test('api integration: POST fails without title', async () => {
+  const newBlog = {
+    author: 'Cardi B',
+    url: 'www.blg.dr',
+    likes: 11
+  }
 
+  const response = await api.post('/api/blogs').send(newBlog)
+    
+  expect(response.statusCode).toBe(400)
+})
+
+test('api integration: POST fails without url', async () => {
+  const newBlog = {
+    title: 'This Will Not Work',
+    author: 'Cardi B',
+    likes: 232
+  }
+
+  const response = await api.post('/api/blogs').send(newBlog)
+    
+  expect(response.statusCode).toBe(400)
+})
 
 afterAll(() => {
   mongoose.connection.close()
