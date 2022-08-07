@@ -16,10 +16,11 @@ beforeEach(async () => {
 })
 
 test('api integration: GET', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+  const response = await api.get('/api/blogs')
+
+  expect(response.status).toEqual(200)
+  expect(response.headers['content-type']).toContain('application/json')
+  expect(response.body).toHaveLength(helper.initialBlogs.length)
 }, 30000)
 
 test('api integration: POST', async () => {
