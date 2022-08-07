@@ -3,7 +3,6 @@ const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blogs')
 const helper = require('../utils/test_helper')
-
 const api = supertest(app)
 
 beforeEach(async () => {
@@ -89,6 +88,22 @@ describe('Testing POST calls...', () => {
     const response = await api.post('/api/blogs').send(newBlog)
       
     expect(response.statusCode).toBe(400)
+  })
+})
+
+describe('Testing DELETE calls...', () => {
+  test('api integration: DELETE call works', async () => {
+    const response = await api.get('/api/blogs')
+    const oldLength = response.body.length
+
+    const id = response.body[0]._id
+    const deletedBlog = await api.delete(`/api/blogs/${id}`)
+
+    const newResponse = await api.get('/api/blogs')
+    const newLength = newResponse.body.length
+
+    expect(deletedBlog.statusCode).toEqual(200)
+    expect(oldLength - newLength).toEqual(1)
   })
 })
 
