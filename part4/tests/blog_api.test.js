@@ -91,6 +91,25 @@ describe('Testing POST calls...', () => {
   })
 })
 
+describe('Testing PUT calls...', () => {
+  test('api integration: PUT call works', async () => {
+    const response = await api.get('/api/blogs')
+    const index = Math.floor(Math.random()*helper.initialBlogs.length)
+    const oldBlog = response.body[index]
+
+    const updatedBlog = await api.put(`/api/blogs/${oldBlog._id}`)
+      .set('Content-Type', 'application/json')
+      .send('{"title":"Updated","author":"api", "url":"jest.dev"}')
+    
+    const newResponse = await api.get('/api/blogs')
+    const newBlog = newResponse.body[index]
+
+    expect(updatedBlog.statusCode).toEqual(200)
+    expect(newBlog.title).toEqual('Updated')
+    expect(newBlog.likes).toEqual(oldBlog.likes)
+  })
+})
+
 describe('Testing DELETE calls...', () => {
   test('api integration: DELETE call works', async () => {
     const response = await api.get('/api/blogs')
