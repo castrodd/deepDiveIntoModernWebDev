@@ -44,6 +44,36 @@ test('api integration: POST', async () => {
   expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
 })
 
+test('api integration: GET', async () => {
+  const response = await api.get('/api/blogs')
+
+  expect(response.status).toEqual(200)
+  expect(response.headers['content-type']).toContain('application/json')
+  expect(response.body).toHaveLength(helper.initialBlogs.length)
+}, 30000)
+
+test('api integration: POST has default for like prop', async () => {
+  const newBlog = {
+    title: 'So Much Blog!',
+    author: 'Ann Bo',
+    url: 'www.bl.bk',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+  const contents = response.body.filter(blog => blog.author === 'Ann Bo')
+
+  expect(contents[0].likes).toBe(0)
+  expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
+})
+
+
+
 afterAll(() => {
   mongoose.connection.close()
 })
