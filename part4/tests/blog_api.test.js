@@ -1,7 +1,9 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const bcrypt = require('bcrypt')
 const app = require('../app')
 const Blog = require('../models/blogs')
+const User = require('../models/users')
 const helper = require('../utils/test_helper')
 const api = supertest(app)
 
@@ -123,6 +125,38 @@ describe('Testing DELETE calls...', () => {
 
     expect(deletedBlog.statusCode).toEqual(200)
     expect(oldLength - newLength).toEqual(1)
+  })
+})
+
+describe('Testing USER endpoints...', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('hushhush', 10)
+    const user = new User({username: 'first', passwordHash})
+
+    await user.save()
+  })
+
+  test('api integration: GET users', async () => {
+    const initialUsers = await helper.usersInDb()
+
+    const newUser = {
+      name: 'Some Body',
+      username: 'somebody',
+      password: 'somewords'
+    }
+
+    await api.post('/api/users')
+      .send(newUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+    
+    const currentUsers = await helper.usersInDb()
+    expect(currentUsers.length - initialUsers.length).toEqual(1)
+
+    const userNames = currentUsers.map(user => user.username)
+    expect(userNames).toContain('somebody')
   })
 })
 
