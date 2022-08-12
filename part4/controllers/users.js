@@ -11,6 +11,14 @@ usersRouter.post('/', async (request, response) => {
   try {
     const { username, name, password } = request.body
 
+    if (!password) {
+      throw 'Password must be provided.'
+    }
+
+    if (password.length < 8) {
+      throw 'Password must be at least 8 characters long.'
+    }
+
     const saltRounds = 10
     const passwordHash = await bcrypt.hash(password, saltRounds)
   
@@ -24,7 +32,7 @@ usersRouter.post('/', async (request, response) => {
   
     response.status(201).json(savedUser)
   } catch (error) {
-    response.status(400).send('User cannot be created.')
+    response.status(400).send(`User cannot be created. ${error}`)
   }
   
 })
