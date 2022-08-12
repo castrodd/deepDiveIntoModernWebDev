@@ -139,6 +139,14 @@ describe('Testing USER endpoints...', () => {
   })
 
   test('api integration: GET users', async () => {
+    const response = await api.get('/api/users')
+
+    expect(response.status).toEqual(200)
+    expect(response.body.length).toEqual(1)
+    expect(response.body[0].username).toEqual('first')
+  })
+
+  test('api integration: POST users', async () => {
     const initialUsers = await helper.usersInDb()
 
     const newUser = {
@@ -157,6 +165,73 @@ describe('Testing USER endpoints...', () => {
 
     const userNames = currentUsers.map(user => user.username)
     expect(userNames).toContain('somebody')
+  })
+
+  test('api integration: POST fails when missing username', async () => {
+    const newUser = {
+      name: 'Some Body',
+      password: 'somewords'
+    }
+
+    const response = await api.post('/api/users').send(newUser)
+
+    expect(response.status).toEqual(400)
+    expect(response.error.text).toContain('ValidationError')
+  })
+
+  test('api integration: POST fails when missing password', async () => {
+    const newUser = {
+      username: 'thisissomeuser',
+      name: 'Some Body'
+    }
+
+    const response = await api.post('/api/users').send(newUser)
+
+    expect(response.status).toEqual(400)
+    expect(response.error.text).toBe('User cannot be created. Password must be provided.')
+  })
+
+  test('api integration: POST fails when username too short', async () => {
+    const newUser = {
+      username: 'a',
+      name: 'Some Body',
+      password: 'somewords'
+    }
+
+    const response = await api.post('/api/users').send(newUser)
+
+    expect(response.status).toEqual(400)
+    expect(response.error.text).toContain('ValidationError')
+  })
+
+  test('api integration: POST fails when password too short', async () => {
+    const newUser = {
+      username: 'thisissomeuser',
+      name: 'Some Body',
+      password: 'a'
+    }
+
+    const response = await api.post('/api/users').send(newUser)
+
+    expect(response.status).toEqual(400)
+    expect(response.error.text).toBe('User cannot be created. Password must be at least 8 characters long.')
+  })
+
+  test('api integration: POST fails when username not unique', async () => {
+    const newUser = {
+      username: 'uniqueuser',
+      name: 'Some Body',
+      password: 'somewords'
+    }
+
+    await api.post('/api/users')
+      .send(newUser)
+      .expect(201)
+    
+    const response = await api.post('/api/users').send(newUser)
+
+    expect(response.status).toEqual(400)
+    expect(response.error.text).toContain('duplicate key error')
   })
 })
 
