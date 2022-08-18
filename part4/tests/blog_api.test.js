@@ -9,9 +9,19 @@ const api = supertest(app)
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  await User.deleteMany({})
+
+  for (let user of helper.initialUsers) {
+    const passwordHash = await bcrypt.hash('hushhush', 10)
+    let userObject = new User({...user, passwordHash})
+    await userObject.save()
+  }
 
   for (let blog of helper.initialBlogs) {
     let blogObject = new Blog(blog)
+    let user = await User.find({ username: 'somebody'})
+    let userId = user[0]._id.toString()
+    blogObject.user = userId
     await blogObject.save()
   }
 })
@@ -101,7 +111,7 @@ describe('Testing PUT calls...', () => {
 
     const updatedBlog = await api.put(`/api/blogs/${oldBlog._id}`)
       .set('Content-Type', 'application/json')
-      .send('{"title":"Updated","author":"api", "url":"jest.dev"}')
+      .send('{"title":"Updated", "author":"api", "url":"jest.dev"}')
     
     const newResponse = await api.get('/api/blogs')
     const newBlog = newResponse.body[index]
@@ -118,7 +128,16 @@ describe('Testing DELETE calls...', () => {
     const oldLength = response.body.length
 
     const id = response.body[0]._id
-    const deletedBlog = await api.delete(`/api/blogs/${id}`)
+    const userName = response.body[0].user.username
+    const tokenRequest = await api
+      .post('/api/login')
+      .set('Content-Type', 'application/json')
+      .send(`{"username":"${userName}", "password":"someword"}`)
+
+    const deletedBlog = await api
+      .delete(`/api/blogs/${id}`)
+      .set('Content-Type', 'application/json')
+      .set('Authorization', `Bearer ${tokenRequest.body.token}`)
 
     const newResponse = await api.get('/api/blogs')
     const newLength = newResponse.body.length
@@ -150,9 +169,9 @@ describe('Testing USER endpoints...', () => {
     const initialUsers = await helper.usersInDb()
 
     const newUser = {
-      name: 'Some Body',
-      username: 'somebody',
-      password: 'somewords'
+      name: 'Some Body4',
+      username: 'somebody4',
+      password: 'someword4'
     }
 
     await api.post('/api/users')
@@ -164,13 +183,13 @@ describe('Testing USER endpoints...', () => {
     expect(currentUsers.length - initialUsers.length).toEqual(1)
 
     const userNames = currentUsers.map(user => user.username)
-    expect(userNames).toContain('somebody')
+    expect(userNames).toContain('4')
   })
 
   test('api integration: POST fails when missing username', async () => {
     const newUser = {
-      name: 'Some Body',
-      password: 'somewords'
+      name: 'Some Body5',
+      password: 'someword5'
     }
 
     const response = await api.post('/api/users').send(newUser)
