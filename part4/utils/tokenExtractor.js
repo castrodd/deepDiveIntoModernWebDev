@@ -1,4 +1,4 @@
-const tokenExtractor = (request, response, next) => {
+const tokenExtractor = (request, _, next) => {
   const authorization = request.get('authorization')
 
   if (authorization && authorization.toLowerCase().startsWith('bearer')) {
