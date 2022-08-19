@@ -19,7 +19,6 @@ blogsRouter.post('/', user.userExtractor, async (request, response) => {
 
     return response.status(201).json(result)
   } catch(error) {
-    console.log(error)
     return response.status(400).json(error)
   }
 })

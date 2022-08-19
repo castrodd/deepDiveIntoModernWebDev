@@ -38,6 +38,13 @@ describe('Testing GET calls...', () => {
 
 describe('Testing POST calls...', () => {
   test('api integration: POST', async () => {
+    const user = await api.get('/api/users')
+    const userName = user.body[0].username
+    const tokenRequest = await api
+      .post('/api/login')
+      .set('Content-Type', 'application/json')
+      .send(`{"username":"${userName}", "password":"someword"}`)
+
     const newBlog = {
       title: "That's My Blog!",
       author: "Annie Bodie",
@@ -47,6 +54,7 @@ describe('Testing POST calls...', () => {
   
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${tokenRequest.body.token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -59,6 +67,13 @@ describe('Testing POST calls...', () => {
   })
   
   test('api integration: POST has default for like prop', async () => {
+    const user = await api.get('/api/users')
+    const userName = user.body[0].username
+    const tokenRequest = await api
+      .post('/api/login')
+      .set('Content-Type', 'application/json')
+      .send(`{"username":"${userName}", "password":"someword"}`)
+
     const newBlog = {
       title: 'So Much Blog!',
       author: 'Ann Bo',
@@ -67,6 +82,7 @@ describe('Testing POST calls...', () => {
   
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${tokenRequest.body.token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -79,25 +95,45 @@ describe('Testing POST calls...', () => {
   })
   
   test('api integration: POST fails without title', async () => {
+    const user = await api.get('/api/users')
+    const userName = user.body[0].username
+    const tokenRequest = await api
+      .post('/api/login')
+      .set('Content-Type', 'application/json')
+      .send(`{"username":"${userName}", "password":"someword"}`)
+
     const newBlog = {
       author: 'Cardi B',
       url: 'www.blg.dr',
       likes: 11
     }
   
-    const response = await api.post('/api/blogs').send(newBlog)
+    const response = await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${tokenRequest.body.token}`)
+      .send(newBlog)
       
     expect(response.statusCode).toBe(400)
   })
   
   test('api integration: POST fails without url', async () => {
+    const user = await api.get('/api/users')
+    const userName = user.body[0].username
+    const tokenRequest = await api
+      .post('/api/login')
+      .set('Content-Type', 'application/json')
+      .send(`{"username":"${userName}", "password":"someword"}`)
+
     const newBlog = {
       title: 'This Will Not Work',
       author: 'Cardi B',
       likes: 232
     }
   
-    const response = await api.post('/api/blogs').send(newBlog)
+    const response = await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${tokenRequest.body.token}`)
+      .send(newBlog)
       
     expect(response.statusCode).toBe(400)
   })
@@ -183,7 +219,7 @@ describe('Testing USER endpoints...', () => {
     expect(currentUsers.length - initialUsers.length).toEqual(1)
 
     const userNames = currentUsers.map(user => user.username)
-    expect(userNames).toContain('4')
+    expect(userNames).toContain('somebody4')
   })
 
   test('api integration: POST fails when missing username', async () => {
