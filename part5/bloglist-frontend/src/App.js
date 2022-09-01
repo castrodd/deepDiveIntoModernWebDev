@@ -27,10 +27,8 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    console.log('logging in with...', username, password)
     try {
       const user = await loginService.login({ username, password })
-
       window.localStorage.setItem('user', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
@@ -40,6 +38,10 @@ const App = () => {
       setErrorMessage('Wrong credentials')
       setTimeout(() => setErrorMessage(null), 5000)
     }
+  }
+
+  const handleLogout = () => {
+    setUser(null)
   }
 
   const loginForm = () => (
@@ -72,7 +74,11 @@ const App = () => {
   const blogsForm = () => (
     <div>
       <h2>Blogs</h2>
-      <h4>Logged in as {user.username}</h4>
+      <h4>Logged in as {user.username} 
+        <button onClick={handleLogout}>
+          logout
+        </button>
+      </h4>
       {blogs.map(blog =>
         <Blog key={blog._id} blog={blog} />
       )}
