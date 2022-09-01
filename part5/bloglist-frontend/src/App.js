@@ -57,11 +57,7 @@ const App = () => {
     </div>
   )
 
-  if (!user) {
-    return loginForm()
-  }
-
-  return (
+  const blogsForm = () => (
     <div>
       <h2>Blogs</h2>
       <h4>Logged in as {user.username}</h4>
@@ -69,6 +65,10 @@ const App = () => {
         <Blog key={blog._id} blog={blog} />
       )}
     </div>
+  )
+
+  return (
+    user ? blogsForm() : loginForm()
   )
 }
 
