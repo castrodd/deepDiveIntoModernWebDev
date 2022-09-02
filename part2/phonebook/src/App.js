@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-
 import Filter from './Filter'
 import Notification from './Notification'
 import PeopleService from './Service/PeopleService'
