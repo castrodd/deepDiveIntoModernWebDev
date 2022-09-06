@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import LoginForm from './components/Login'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -83,34 +84,6 @@ const App = () => {
     }
   }
 
-  const loginForm = () => (
-    <div>
-      <h2>Log in</h2>
-      <Notification message={message} />
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            type='text'
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type='text'
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type='submit'>login</button>
-      </form>
-    </div>
-  )
-
   const blogsForm = () => (
     <div>
       <h2>Blogs</h2>
@@ -159,7 +132,16 @@ const App = () => {
   )
 
   return (
-    user ? blogsForm() : loginForm()
+    user 
+    ? blogsForm() 
+    : <LoginForm
+        message={message}
+        handleLogin={handleLogin}
+        setUsername={setUsername}
+        setPassword={setPassword}
+        username={username}
+        password={password}
+      />
   )
 }
 
