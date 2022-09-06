@@ -15,6 +15,7 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
+  const [loginVisible, setLoginVisible] = useState(true)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -84,11 +85,35 @@ const App = () => {
     }
   }
 
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
+        </div>
+        <div style={showWhenVisible}>
+          <LoginForm
+            message={message}
+            handleLogin={handleLogin}
+            setUsername={setUsername}
+            setPassword={setPassword}
+            username={username}
+            password={password}
+          />
+          <button onClick={ () => setLoginVisible(false)}>cancel</button>
+        </div>
+      </div>
+    )
+  }
+
   const blogsForm = () => (
     <div>
       <h2>Blogs</h2>
       <Notification message={message} />
-      <h4>Logged in as {user.username} 
+      <h4>Logged in as {user.username}
         <button onClick={handleLogout}>
           logout
         </button>
@@ -97,16 +122,16 @@ const App = () => {
       <h2>Create New Blog</h2>
       <form onSubmit={createBlog}>
         <div>
-            author: 
-            <input
-              type='text'
-              value={author}
-              name="Author"
-              onChange={({ target }) => setAuthor(target.value)}
-            />
+          author:
+          <input
+            type='text'
+            value={author}
+            name="Author"
+            onChange={({ target }) => setAuthor(target.value)}
+          />
         </div>
         <div>
-          title: 
+          title:
           <input
             type='text'
             value={title}
@@ -115,7 +140,7 @@ const App = () => {
           />
         </div>
         <div>
-          url: 
+          url:
           <input
             type='text'
             value={url}
@@ -132,16 +157,9 @@ const App = () => {
   )
 
   return (
-    user 
-    ? blogsForm() 
-    : <LoginForm
-        message={message}
-        handleLogin={handleLogin}
-        setUsername={setUsername}
-        setPassword={setPassword}
-        username={username}
-        password={password}
-      />
+    user
+      ? blogsForm()
+      : loginForm()
   )
 }
 
