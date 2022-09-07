@@ -14,9 +14,6 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
-  const [author, setAuthor] = useState('')
-  const [title, setTitle] = useState('')
-  const [url, setUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -66,21 +63,12 @@ const App = () => {
     setUser(null)
   }
 
-  const createBlog = async (event) => {
-    event.preventDefault()
+  const createBlog = async (blog) => {
     try {
-      const blog = {
-        author: author,
-        title: title,
-        url: url,
-        user: user.id
-      }
       blogFormRef.current.toggleVisible()
+      blog.user = user.id
       const response = await blogService.create(blog)
       sendMessage('notice', 'Blog created')
-      setAuthor('')
-      setTitle('')
-      setUrl('')
       setBlogs([...blogs, response])
     }
     catch (exception) {
@@ -113,15 +101,7 @@ const App = () => {
       </h4>
 
     <Toggle buttonLabel="create new blog" ref={blogFormRef}>
-      <BlogForm
-        createBlog={createBlog}
-        author={author}
-        title={title}
-        url={url}
-        setAuthor={setAuthor}
-        setTitle={setTitle}
-        setUrl={setUrl}
-      />
+      <BlogForm createBlog={createBlog} />
     </Toggle>
 
       {blogs.map(blog =>
