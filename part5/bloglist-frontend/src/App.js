@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/Login'
@@ -32,6 +32,8 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const blogFormRef = useRef()
 
   const sendMessage = (status, content) => {
     setMessage(
@@ -73,6 +75,7 @@ const App = () => {
         url: url,
         user: user.id
       }
+      blogFormRef.current.toggleVisible()
       const response = await blogService.create(blog)
       sendMessage('notice', 'Blog created')
       setAuthor('')
@@ -109,7 +112,7 @@ const App = () => {
         </button>
       </h4>
 
-    <Toggle buttonLabel="create new blog">
+    <Toggle buttonLabel="create new blog" ref={blogFormRef}>
       <BlogForm
         createBlog={createBlog}
         author={author}
