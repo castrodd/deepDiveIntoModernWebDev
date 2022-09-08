@@ -112,16 +112,16 @@ const App = () => {
   }
 
   const loginForm = () => (
-      <Toggle buttonLabel="login">
-        <LoginForm
-          message={message}
-          handleLogin={handleLogin}
-          setUsername={setUsername}
-          setPassword={setPassword}
-          username={username}
-          password={password}
-        />
-      </Toggle>
+    <Toggle buttonLabel="login">
+      <LoginForm
+        message={message}
+        handleLogin={handleLogin}
+        setUsername={setUsername}
+        setPassword={setPassword}
+        username={username}
+        password={password}
+      />
+    </Toggle>
   )
 
   const blogsForm = () => (
@@ -132,18 +132,18 @@ const App = () => {
         <button onClick={handleLogout}>logout</button>
       </h4>
 
-    <Toggle buttonLabel="create new blog" ref={blogFormRef}>
-      <BlogForm createBlog={createBlog} />
-    </Toggle>
+      <Toggle buttonLabel="create new blog" ref={blogFormRef}>
+        <BlogForm createBlog={createBlog} />
+      </Toggle>
       {blogs
         .sort((x, y) => y.likes - x.likes)
-        .map(blog => 
-          <Blog 
-            key={blog._id} 
-            blog={blog} 
+        .map(blog =>
+          <Blog
+            key={blog._id}
+            blog={blog}
             deleteBlog={deleteBlog}
           />
-      )}
+        )}
     </div>
   )
 
