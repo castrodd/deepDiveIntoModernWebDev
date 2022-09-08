@@ -79,7 +79,6 @@ const App = () => {
 
   const modifyBlog = async (blogId, blog) => {
     try {
-      blogFormRef.current.toggleVisible()
       const response = await blogService.modify(blogId, blog)
       setBlogs(blogs.map(currBlog => {
         if (currBlog._id === blogId) {
