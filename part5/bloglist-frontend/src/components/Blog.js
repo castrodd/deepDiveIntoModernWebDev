@@ -1,5 +1,6 @@
 import { useState } from "react"
 import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, deleteBlog }) => {
   const [viewAll, setViewAll] = useState(false)
@@ -55,6 +56,11 @@ const Blog = ({ blog, deleteBlog }) => {
     ? fullBlog()
     : title()
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  deleteBlog: PropTypes.func.isRequired
 }
 
 export default Blog
