@@ -77,6 +77,40 @@ const App = () => {
     }
   }
 
+  const deleteBlog = async (blog) => {
+    try {
+      const blogUser = setBlogUser(blog.user)
+      if (!blogUser) {
+        throw Error('Permission denied to remove blog!')
+      }
+
+      blogFormRef.current.toggleVisible()
+      await blogService.remove(blog._id)
+      sendMessage('notice', 'Blog deleted')
+      setBlogs(blogs.filter(currBlog => currBlog._id !== blog._id))
+    }
+    catch (exception) {
+      sendMessage('error', 'Unable to delete blog')
+      setTimeout(() => setMessage(null), 5000)
+    }
+  }
+
+  const setBlogUser = (blogUser) => {
+    if (!blogUser) {
+      return ''
+    }
+
+    if (blogUser.id) {
+      return blogUser.id
+    }
+
+    if (typeof blogUser === 'string') {
+      return blogUser
+    }
+
+    return ''
+  }
+
   const loginForm = () => (
       <Toggle buttonLabel="login">
         <LoginForm
@@ -95,19 +129,21 @@ const App = () => {
       <h2>Blogs</h2>
       <Notification message={message} />
       <h4>Logged in as {user.username}
-        <button onClick={handleLogout}>
-          logout
-        </button>
+        <button onClick={handleLogout}>logout</button>
       </h4>
 
     <Toggle buttonLabel="create new blog" ref={blogFormRef}>
       <BlogForm createBlog={createBlog} />
     </Toggle>
-
       {blogs
         .sort((x, y) => y.likes - x.likes)
-        .map(blog => <Blog key={blog._id} blog={blog} />)
-      }
+        .map(blog => 
+          <Blog 
+            key={blog._id} 
+            blog={blog} 
+            deleteBlog={deleteBlog}
+          />
+      )}
     </div>
   )
 
