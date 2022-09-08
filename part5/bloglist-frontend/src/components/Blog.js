@@ -1,10 +1,8 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, deleteBlog }) => {
+const Blog = ({ blog, modifyBlog, deleteBlog }) => {
   const [viewAll, setViewAll] = useState(false)
-  const [likes, setLikes] = useState(blog.likes)
 
   const addLike = async (event) => {
     event.preventDefault()
@@ -12,11 +10,10 @@ const Blog = ({ blog, deleteBlog }) => {
       author: blog.author,
       title: blog.title,
       url: blog.url,
-      likes: likes + 1,
+      likes: blog.likes + 1,
       user: blog.user.id
     }
-    await blogService.create(blogPayload)
-    setLikes(likes + 1)
+    await modifyBlog(blog._id, blogPayload)
   }
 
   const removeBlog = async (event) => {
@@ -45,7 +42,7 @@ const Blog = ({ blog, deleteBlog }) => {
       <button onClick={() => setViewAll(false)}>hide</button><br/>
       <span>By:</span> {blog.author}<br/>
       <span> URL:</span> {blog.url}<br/>
-      <span>Likes:</span> {likes}
+      <span>Likes:</span> {blog.likes}
       <button onClick={addLike}>Like</button><br/>
       <button onClick={removeBlog}>Remove</button>
     </div>
@@ -58,6 +55,7 @@ const Blog = ({ blog, deleteBlog }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
+  modifyBlog: PropTypes.func.isRequired,
   deleteBlog: PropTypes.func.isRequired
 }
 

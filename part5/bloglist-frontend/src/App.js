@@ -77,6 +77,23 @@ const App = () => {
     }
   }
 
+  const modifyBlog = async (blogId, blog) => {
+    try {
+      blogFormRef.current.toggleVisible()
+      const response = await blogService.modify(blogId, blog)
+      setBlogs(blogs.map(currBlog => {
+        if (currBlog._id === blogId) {
+          return response
+        }
+        return currBlog
+      }))
+    }
+    catch (exception) {
+      sendMessage('error', 'Unable to update blog')
+      setTimeout(() => setMessage(null), 2000)
+    }
+  }
+
   const deleteBlog = async (blog) => {
     try {
       const blogUser = setBlogUser(blog.user)
@@ -141,6 +158,7 @@ const App = () => {
           <Blog
             key={blog._id}
             blog={blog}
+            modifyBlog={modifyBlog}
             deleteBlog={deleteBlog}
           />
         )}
