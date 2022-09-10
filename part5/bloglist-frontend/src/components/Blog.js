@@ -30,14 +30,14 @@ const Blog = ({ blog, modifyBlog, deleteBlog }) => {
   }
 
   const title = () => (
-    <div className="blog">
+    <div className="blog" id="title">
       <span>Title:</span> {blog.title}
       <button onClick={() => setViewAll(true)}>view</button>
     </div>
   )
 
   const fullBlog = () => (
-    <div className="blog" style={blogStyle}>
+    <div className="blog" id="full-blog" style={blogStyle}>
       <span>Title:</span> {blog.title}
       <button onClick={() => setViewAll(false)}>hide</button><br/>
       <span>By:</span> {blog.author}<br/>
