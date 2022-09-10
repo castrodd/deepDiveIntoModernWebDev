@@ -143,6 +143,7 @@ const App = () => {
   const blogsForm = () => (
     <div>
       <h2>Blogs</h2>
+      <h3>Created by ddc</h3>
       <Notification message={message} />
       <h4>Logged in as {user.username}
         <button onClick={handleLogout}>logout</button>
