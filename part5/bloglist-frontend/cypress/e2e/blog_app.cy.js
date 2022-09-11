@@ -15,4 +15,22 @@ describe('Blog app', function() {
     cy.get('#submit').click()
     cy.contains('Logged in as dwyanewade')
   })
+
+  describe('when logged in', function() {
+    beforeEach(function() {
+      cy.contains('login').click()  
+      cy.get('#username').type('dwyanewade')
+      cy.get('#password').type('theflash')
+      cy.get('#submit').click()
+    })
+
+    it('a new blog can be created', function() {
+      cy.contains('create new blog').click()
+      cy.get('#author').type('Cypress Hill')
+      cy.get('#title').type('Automated Testing')
+      cy.get('#url').type('www.cypress.test')
+      cy.get('#submit-blog').click()
+      cy.contains('Automated Testing')
+    })
+  })
 })
