@@ -130,7 +130,6 @@ const App = () => {
   const loginForm = () => (
     <Toggle buttonLabel="login">
       <LoginForm
-        message={message}
         handleLogin={handleLogin}
         setUsername={setUsername}
         setPassword={setPassword}

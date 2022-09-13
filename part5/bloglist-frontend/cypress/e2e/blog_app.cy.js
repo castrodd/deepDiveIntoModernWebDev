@@ -23,12 +23,17 @@ describe('Blog app', function() {
     cy.contains('Logged in as dwyanewade')
   })
 
+  it('login fails with wrong password', function() {
+    cy.contains('login').click()  
+    cy.get('#username').type('dwyanewade')
+    cy.get('#password').type('thediesel')
+    cy.get('#submit').click()
+    cy.contains('Wrong credentials!')
+  })  
+
   describe('when logged in', function() {
     beforeEach(function() {
-      cy.contains('login').click()  
-      cy.get('#username').type('dwyanewade')
-      cy.get('#password').type('theflash')
-      cy.get('#submit').click()
+      cy.login({username: 'dwyanewade', password: 'theflash'})
     })
 
     it('a new blog can be created', function() {
