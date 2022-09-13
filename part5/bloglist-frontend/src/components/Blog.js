@@ -44,7 +44,7 @@ const Blog = ({ blog, modifyBlog, deleteBlog }) => {
       <span> URL:</span> {blog.url}<br/>
       <span>Likes:</span> {blog.likes}
       <button id='like-button' onClick={addLike}>Like</button><br/>
-      <button onClick={removeBlog}>Remove</button>
+      <button id='remove-button' onClick={removeBlog}>Remove</button>
     </div>
   )
 
