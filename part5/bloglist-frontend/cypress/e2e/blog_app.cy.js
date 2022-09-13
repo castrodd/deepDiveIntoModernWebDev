@@ -34,37 +34,43 @@ describe('Blog app', function() {
   describe('when logged in', function() {
     beforeEach(function() {
       cy.login({username: 'dwyanewade', password: 'theflash'})
-    })
-
-    it('a new blog can be created', function() {
       cy.contains('create new blog').click()
       cy.get('#author').type('Cypress Hill')
       cy.get('#title').type('Automated Testing')
       cy.get('#url').type('www.cypress.test')
       cy.get('#submit-blog').click()
+    })
+
+    it('a new blog can be created', function() {
       cy.contains('Automated Testing')
     })
 
     it('a user can like a blog', function() {
-      cy.contains('create new blog').click()
-      cy.get('#author').type('Cypress Hill')
-      cy.get('#title').type('Automated Testing')
-      cy.get('#url').type('www.cypress.test')
-      cy.get('#submit-blog').click()
       cy.contains('view').click()
       cy.get('#like-button').click()
       cy.contains('Likes: 1')
     })
 
     it('a user can delete a blog', function() {
-      cy.contains('create new blog').click()
-      cy.get('#author').type('Cypress Hill')
-      cy.get('#title').type('Automated Testing')
-      cy.get('#url').type('www.cypress.test')
-      cy.get('#submit-blog').click()
       cy.contains('view').click()
       cy.get('#remove-button').click()
       cy.contains('Automate Testing').should('not.exist')
+    })
+
+    it('wrong user cannot delete', () => {
+      const user = {
+        name: 'Shaq',
+        username: 'shaqattack',
+        password: 'thediesel'
+      }
+      cy.request('POST', 'http://localhost:3003/api/users/', user)
+
+      cy.contains('logout').click()
+      cy.login({username: 'shaqattack', password: 'thediesel'})
+
+      cy.contains('view').click()
+      cy.get('#remove-button').click()
+      cy.contains('Automated Testing')
     })
   })
 })
