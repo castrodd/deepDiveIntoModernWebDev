@@ -44,5 +44,16 @@ describe('Blog app', function() {
       cy.get('#submit-blog').click()
       cy.contains('Automated Testing')
     })
+
+    it('a user can like a blog', function() {
+      cy.contains('create new blog').click()
+      cy.get('#author').type('Cypress Hill')
+      cy.get('#title').type('Automated Testing')
+      cy.get('#url').type('www.cypress.test')
+      cy.get('#submit-blog').click()
+      cy.contains('view').click()
+      cy.get('#like-button').click()
+      cy.contains('Likes: 1')
+    })
   })
 })
