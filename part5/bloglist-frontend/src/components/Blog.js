@@ -39,7 +39,7 @@ const Blog = ({ blog, modifyBlog, deleteBlog }) => {
   const fullBlog = () => (
     <div className='blog' id='full-blog' style={blogStyle}>
       <span>Title:</span> {blog.title}
-      <button onClick={() => setViewAll(false)}>hide</button><br/>
+      <button id='hide-button' onClick={() => setViewAll(false)}>hide</button><br/>
       <span>By:</span> {blog.author}<br/>
       <span> URL:</span> {blog.url}<br/>
       <span>Likes:</span> {blog.likes}

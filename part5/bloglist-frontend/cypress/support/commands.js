@@ -39,3 +39,10 @@ Cypress.Commands.add('createBlog', ({author, title, url}) => {
   cy.get('#url').type(url)
   cy.get('#submit-blog').click()
 })
+
+Cypress.Commands.add('likeButton', ({title}) => {
+  cy.get('.blog').contains(title)
+  .contains('view')
+  .click()
+  .get('#like-button')
+})
