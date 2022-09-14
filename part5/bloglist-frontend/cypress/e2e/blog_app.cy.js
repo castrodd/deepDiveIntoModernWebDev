@@ -34,11 +34,11 @@ describe('Blog app', function() {
   describe('when logged in', function() {
     beforeEach(function() {
       cy.login({username: 'dwyanewade', password: 'theflash'})
-      cy.contains('create new blog').click()
-      cy.get('#author').type('Cypress Hill')
-      cy.get('#title').type('Automated Testing')
-      cy.get('#url').type('www.cypress.test')
-      cy.get('#submit-blog').click()
+      cy.createBlog({
+        author: 'Cypress Hill',
+        title: 'Automated Testing',
+        url: 'www.cypress.test'
+      })
     })
 
     it('a new blog can be created', function() {
