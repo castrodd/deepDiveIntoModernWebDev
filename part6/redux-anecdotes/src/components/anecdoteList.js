@@ -10,10 +10,12 @@ const AnecdoteList = () => {
     dispatch(vote(id))
   }
 
+  const sortedAnecdotes = anecdotes.sort((a, b) => a.votes > b.votes ? -1 : 1)
+
   return (
     <div>
       {
-        anecdotes.map(anecdote =>
+        sortedAnecdotes.map(anecdote =>
           <div key={anecdote.id}>
             <div>
               {anecdote.content}
