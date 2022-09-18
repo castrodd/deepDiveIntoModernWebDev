@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit'
+let anecdotes = []
+let notification = 'Initial Notification'
 
 const anecdotesAtStart = [
   'Give a man a program, frustrate him for a day. Teach a man to program, frustrate him for a lifetime.',
@@ -12,7 +13,7 @@ const anecdotesAtStart = [
 
 const getId = () => (100000 * Math.random()).toFixed(0)
 
-const asObject = (anecdote) => {
+export const asObject = (anecdote) => {
   return {
     content: anecdote,
     id: getId(),
@@ -20,27 +21,8 @@ const asObject = (anecdote) => {
   }
 }
 
-let anecdotes = anecdotesAtStart.map(asObject)
+anecdotes = anecdotesAtStart.map(asObject)
 
-const anecdoteSlice = createSlice({
-  name: 'anecdotes',
-  initialState: anecdotes,
-  reducers: {
-    addVote(state = anecdotes, action) {
-      let newState = state.anecdotes.map(anecdote => {
-        if (anecdote.id === action.payload) {
-          return {...anecdote, votes: anecdote.votes + 1}
-        } 
-        return anecdote
-      })
-      return {...state, anecdotes: newState}
-    },
-    createAnecdote(state = anecdotes, action) {
-      const newAnecdote = asObject(action.payload)
-      return {...state, anecdotes: [...state.anecdotes, newAnecdote]}
-    }
-  }
-})
+const initialState = {anecdotes, notification}
 
-export const { addVote, createAnecdote } = anecdoteSlice.actions
-export default anecdoteSlice.reducer
+export default initialState
