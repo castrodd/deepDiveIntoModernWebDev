@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
+import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Toggle from './components/Toggle'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { setNotification } from './reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
 import './index.css'
 
 const App = () => {
@@ -13,7 +15,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState(null)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -32,18 +34,6 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  const sendMessage = (status, content) => {
-    setMessage(
-      {
-        status: status,
-        content: content
-      }
-    )
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
-  }
-
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -54,8 +44,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      sendMessage('error', 'Wrong credentials!')
-      setTimeout(() => setMessage(null), 5000)
+      dispatch(setNotification('error', 'Wrong credentials!', 5))
     }
   }
 
@@ -68,12 +57,28 @@ const App = () => {
       blogFormRef.current.toggleVisible()
       blog.user = user.id
       const response = await blogService.create(blog)
-      sendMessage('notice', 'Blog created')
+      dispatch(setNotification('notice', 'Blog created', 5))
       setBlogs([...blogs, response])
     }
     catch (exception) {
-      sendMessage('error', 'Unable to create new blog')
-      setTimeout(() => setMessage(null), 5000)
+      dispatch(setNotification('error', 'Unable to create new blog', 5))
+    }
+  }
+
+  const deleteBlog = async (blog) => {
+    try {
+      const blogUser = setBlogUser(blog.user)
+      if (!blogUser) {
+        throw Error('Permission denied to remove blog!')
+      }
+
+      blogFormRef.current.toggleVisible()
+      await blogService.remove(blog._id)
+      dispatch(setNotification('notice', 'Blog deleted', 5))
+      setBlogs(blogs.filter(currBlog => currBlog._id !== blog._id))
+    }
+    catch (exception) {
+      dispatch(setNotification('error', 'Unable to delete blog', 5))
     }
   }
 
@@ -88,26 +93,7 @@ const App = () => {
       }))
     }
     catch (exception) {
-      sendMessage('error', 'Unable to update blog')
-      setTimeout(() => setMessage(null), 2000)
-    }
-  }
-
-  const deleteBlog = async (blog) => {
-    try {
-      const blogUser = setBlogUser(blog.user)
-      if (!blogUser) {
-        throw Error('Permission denied to remove blog!')
-      }
-
-      blogFormRef.current.toggleVisible()
-      await blogService.remove(blog._id)
-      sendMessage('notice', 'Blog deleted')
-      setBlogs(blogs.filter(currBlog => currBlog._id !== blog._id))
-    }
-    catch (exception) {
-      sendMessage('error', 'Unable to delete blog')
-      setTimeout(() => setMessage(null), 5000)
+      dispatch(setNotification('error', 'Unable to update blog', 5))
     }
   }
 
@@ -148,16 +134,12 @@ const App = () => {
       <Toggle buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm createBlog={createBlog} />
       </Toggle>
-      {blogs
-        .sort((x, y) => y.likes - x.likes)
-        .map(blog =>
-          <Blog
-            key={blog._id}
-            blog={blog}
-            modifyBlog={modifyBlog}
-            deleteBlog={deleteBlog}
-          />
-        )}
+
+      <BlogList
+        blogs={blogs}
+        deleteBlog={deleteBlog}
+        modifyBlog={modifyBlog}
+      />
     </div>
   )
 
@@ -165,7 +147,7 @@ const App = () => {
     <div>
       <h1>Blogs</h1>
       <h3>Created by ddc</h3>
-      <Notification message={message} />
+      <Notification />
       { user
         ? blogsForm()
         : loginForm()

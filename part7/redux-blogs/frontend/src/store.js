@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import notificationReducer from './reducers/notificationReducer'
 
-const store = configureStore({
+const Store = configureStore({
   reducer: {
-    notification: notificationReducer
+    notifications: notificationReducer
   }
 })
 
-export default store
+export default Store
