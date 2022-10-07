@@ -7,31 +7,34 @@ import Toggle from './components/Toggle'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setBlogs } from './reducers/blogsReducer'
-import { setNotification } from './reducers/notificationReducer'
+import { setNotification } from './reducers/notificationsReducer'
+import { setUser } from './reducers/userReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import './index.css'
 
 const App = () => {
   const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
+
   const dispatch = useDispatch()
 
   useEffect(() => {
     blogService.getAll().then(response =>
       dispatch(setBlogs(response))
     )
-  })
+  }, [dispatch])
 
   useEffect(() => {
     const loggedInUser = window.localStorage.getItem('user')
     if (loggedInUser) {
       const user = JSON.parse(loggedInUser)
-      setUser(user)
+      dispatch(setUser(user))
       blogService.setToken(user.token)
     }
-  }, [])
+  }, [dispatch])
 
   const blogFormRef = useRef()
 
@@ -41,7 +44,7 @@ const App = () => {
       const user = await loginService.login({ username, password })
       window.localStorage.setItem('user', JSON.stringify(user))
       blogService.setToken(user.token)
-      setUser(user)
+      dispatch(setUser(user))
       setUsername('')
       setPassword('')
     } catch (exception) {
@@ -50,7 +53,7 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    setUser(null)
+    dispatch(setUser(null))
   }
 
   const createBlog = async (blog) => {
