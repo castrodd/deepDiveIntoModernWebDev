@@ -6,9 +6,11 @@ const BlogList = ({
   modifyBlog
 }) => {
 
+  const sortableBlogs = [...blogs]
+
   return (
     <div>
-      {blogs
+      {sortableBlogs
         .sort((x, y) => y.likes - x.likes)
         .map(blog =>
           <Blog

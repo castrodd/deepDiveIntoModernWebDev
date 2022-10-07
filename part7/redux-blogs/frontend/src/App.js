@@ -6,22 +6,23 @@ import Notification from './components/Notification'
 import Toggle from './components/Toggle'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { setBlogs } from './reducers/blogsReducer'
 import { setNotification } from './reducers/notificationReducer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import './index.css'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector(state => state.blogs)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
+    blogService.getAll().then(response =>
+      dispatch(setBlogs(response))
     )
-  }, [])
+  })
 
   useEffect(() => {
     const loggedInUser = window.localStorage.getItem('user')
@@ -58,7 +59,7 @@ const App = () => {
       blog.user = user.id
       const response = await blogService.create(blog)
       dispatch(setNotification('notice', 'Blog created', 5))
-      setBlogs([...blogs, response])
+      dispatch(setBlogs([...blogs, response]))
     }
     catch (exception) {
       dispatch(setNotification('error', 'Unable to create new blog', 5))
@@ -75,7 +76,7 @@ const App = () => {
       blogFormRef.current.toggleVisible()
       await blogService.remove(blog._id)
       dispatch(setNotification('notice', 'Blog deleted', 5))
-      setBlogs(blogs.filter(currBlog => currBlog._id !== blog._id))
+      dispatch(setBlogs(blogs.filter(currBlog => currBlog._id !== blog._id)))
     }
     catch (exception) {
       dispatch(setNotification('error', 'Unable to delete blog', 5))
@@ -85,12 +86,12 @@ const App = () => {
   const modifyBlog = async (blogId, blog) => {
     try {
       const response = await blogService.modify(blogId, blog)
-      setBlogs(blogs.map(currBlog => {
+      dispatch(setBlogs(blogs.map(currBlog => {
         if (currBlog._id === blogId) {
           return response
         }
         return currBlog
-      }))
+      })))
     }
     catch (exception) {
       dispatch(setNotification('error', 'Unable to update blog', 5))
