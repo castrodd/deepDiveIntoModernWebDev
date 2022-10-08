@@ -17,11 +17,7 @@ import './index.css'
 const App = () => {
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
-
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [loggedIn, setLoggedIn] = useState(true)
-
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -44,16 +40,16 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    const target = event.target
     try {
       const user = await loginService.login({
-        username: target[0].value,
-        password: target[1].value
+        username: event.target[0].value,
+        password: event.target[1].value
       })
       window.localStorage.setItem('user', JSON.stringify(user))
       blogService.setToken(user.token)
       dispatch(setUser(user))
       setLoggedIn(true)
+      dispatch(setNotification('notice', 'You are now logged in!', 5))
     } catch (exception) {
       dispatch(setNotification('error', 'Wrong credentials!', 5))
       setLoggedIn(false)
@@ -130,10 +126,6 @@ const App = () => {
     <Toggle buttonLabel="login">
       <LoginForm
         handleLogin={handleLogin}
-        setUsername={setUsername}
-        setPassword={setPassword}
-        username={username}
-        password={password}
       />
     </Toggle>
   )
