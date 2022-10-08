@@ -20,6 +20,7 @@ const App = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [loggedIn, setLoggedIn] = useState(true)
 
   const dispatch = useDispatch()
 
@@ -35,6 +36,7 @@ const App = () => {
       const user = JSON.parse(loggedInUser)
       dispatch(setUser(user))
       blogService.setToken(user.token)
+      setLoggedIn(true)
     }
   }, [dispatch])
 
@@ -42,20 +44,25 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
+    const target = event.target
     try {
-      const user = await loginService.login({ username, password })
+      const user = await loginService.login({
+        username: target[0].value,
+        password: target[1].value
+      })
       window.localStorage.setItem('user', JSON.stringify(user))
       blogService.setToken(user.token)
       dispatch(setUser(user))
-      setUsername('')
-      setPassword('')
+      setLoggedIn(true)
     } catch (exception) {
       dispatch(setNotification('error', 'Wrong credentials!', 5))
+      setLoggedIn(false)
     }
   }
 
   const handleLogout = () => {
     dispatch(setUser(null))
+    setLoggedIn(false)
   }
 
   const createBlog = async (blog) => {
@@ -154,7 +161,7 @@ const App = () => {
       <h1>Blogs</h1>
       <h3>Created by ddc</h3>
       <Notification />
-      { user
+      { loggedIn
         ? blogsForm()
         : loginForm()
       }
