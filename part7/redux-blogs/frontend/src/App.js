@@ -1,15 +1,17 @@
 import { useState, useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Toggle from './components/Toggle'
+import Users from './components/Users'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setBlogs } from './reducers/blogsReducer'
 import { setNotification } from './reducers/notificationsReducer'
 import { setUser } from './reducers/userReducer'
-import { useDispatch, useSelector } from 'react-redux'
 import './index.css'
 
 const App = () => {
@@ -147,7 +149,7 @@ const App = () => {
     </div>
   )
 
-  return (
+  const BlogsPage = () => (
     <div>
       <h1>Blogs</h1>
       <h3>Created by ddc</h3>
@@ -157,6 +159,25 @@ const App = () => {
         : loginForm()
       }
     </div>
+  )
+
+  const padding = {
+    padding: 5
+  }
+
+  return (
+    <Router>
+      <div>
+        <Link style={padding} to="/blogs">Blogs</Link>
+        <Link style={padding} to="/users">Users</Link>
+      </div>
+
+      <Routes>
+        <Route path="/" element={<BlogsPage />} />
+        <Route path="/blogs" element={<BlogsPage />} />
+        <Route path="/users" element={<Users />} />
+      </Routes>
+    </Router>
   )
 }
 
