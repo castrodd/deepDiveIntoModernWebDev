@@ -17,7 +17,7 @@ import './index.css'
 const App = () => {
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
-  const [loggedIn, setLoggedIn] = useState(true)
+  const [loggedIn, setLoggedIn] = useState(false)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -91,21 +91,6 @@ const App = () => {
     }
   }
 
-  const modifyBlog = async (blogId, blog) => {
-    try {
-      const response = await blogService.modify(blogId, blog)
-      dispatch(setBlogs(blogs.map(currBlog => {
-        if (currBlog._id === blogId) {
-          return response
-        }
-        return currBlog
-      })))
-    }
-    catch (exception) {
-      dispatch(setNotification('error', 'Unable to update blog', 5))
-    }
-  }
-
   const setBlogUser = (blogUser) => {
     if (!blogUser) {
       return ''
@@ -122,6 +107,21 @@ const App = () => {
     return ''
   }
 
+  const modifyBlog = async (blogId, blog) => {
+    try {
+      const response = await blogService.modify(blogId, blog)
+      dispatch(setBlogs(blogs.map(currBlog => {
+        if (currBlog._id === blogId) {
+          return response
+        }
+        return currBlog
+      })))
+    }
+    catch (exception) {
+      dispatch(setNotification('error', 'Unable to update blog', 5))
+    }
+  }
+
   const loginForm = () => (
     <Toggle buttonLabel="login">
       <LoginForm
@@ -135,7 +135,6 @@ const App = () => {
       <h4>Logged in as {user.username}
         <button onClick={handleLogout}>logout</button>
       </h4>
-
       <Toggle buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm createBlog={createBlog} />
       </Toggle>
@@ -153,7 +152,7 @@ const App = () => {
       <h1>Blogs</h1>
       <h3>Created by ddc</h3>
       <Notification />
-      { loggedIn
+      {loggedIn
         ? blogsForm()
         : loginForm()
       }
