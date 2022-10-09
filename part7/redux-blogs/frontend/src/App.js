@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
+import LoggedInStatus from './components/LoggedInStatus'
 import Notification from './components/Notification'
 import Toggle from './components/Toggle'
 import Users from './components/Users'
@@ -74,6 +75,21 @@ const App = () => {
     }
   }
 
+  const modifyBlog = async (blogId, blog) => {
+    try {
+      const response = await blogService.modify(blogId, blog)
+      dispatch(setBlogs(blogs.map(currBlog => {
+        if (currBlog._id === blogId) {
+          return response
+        }
+        return currBlog
+      })))
+    }
+    catch (exception) {
+      dispatch(setNotification('error', 'Unable to update blog', 5))
+    }
+  }
+
   const deleteBlog = async (blog) => {
     try {
       const blogUser = setBlogUser(blog.user)
@@ -107,34 +123,13 @@ const App = () => {
     return ''
   }
 
-  const modifyBlog = async (blogId, blog) => {
-    try {
-      const response = await blogService.modify(blogId, blog)
-      dispatch(setBlogs(blogs.map(currBlog => {
-        if (currBlog._id === blogId) {
-          return response
-        }
-        return currBlog
-      })))
-    }
-    catch (exception) {
-      dispatch(setNotification('error', 'Unable to update blog', 5))
-    }
-  }
-
-  const loginForm = () => (
-    <Toggle buttonLabel="login">
-      <LoginForm
-        handleLogin={handleLogin}
-      />
-    </Toggle>
-  )
-
   const blogsForm = () => (
     <div>
-      <h4>Logged in as {user.username}
-        <button onClick={handleLogout}>logout</button>
-      </h4>
+      <LoggedInStatus handleLogout={handleLogout} />
+
+      <h1>Blogs</h1>
+      <h3>Created by ddc</h3>
+
       <Toggle buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm createBlog={createBlog} />
       </Toggle>
@@ -147,10 +142,16 @@ const App = () => {
     </div>
   )
 
-  const BlogsPage = () => (
+  const loginForm = () => (
+    <Toggle buttonLabel="login">
+      <LoginForm
+        handleLogin={handleLogin}
+      />
+    </Toggle>
+  )
+
+  const Home = () => (
     <div>
-      <h1>Blogs</h1>
-      <h3>Created by ddc</h3>
       <Notification />
       {loggedIn
         ? blogsForm()
@@ -159,21 +160,21 @@ const App = () => {
     </div>
   )
 
-  const padding = {
+  const linkStyling = {
     padding: 5
   }
 
   return (
     <Router>
       <div>
-        <Link style={padding} to="/blogs">Blogs</Link>
-        <Link style={padding} to="/users">Users</Link>
+        <Link style={linkStyling} to="/blogs">Blogs</Link>
+        <Link style={linkStyling} to="/users">Users</Link>
       </div>
 
       <Routes>
-        <Route path="/" element={<BlogsPage />} />
-        <Route path="/blogs" element={<BlogsPage />} />
-        <Route path="/users" element={<Users />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/blogs" element={<Home />} />
+        <Route path="/users" element={<Users handleLogout={handleLogout}/>} />
       </Routes>
     </Router>
   )

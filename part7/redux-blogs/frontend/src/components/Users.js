@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import LoggedInStatus from './LoggedInStatus'
 
-const Users = () => {
+const Users = ({ handleLogout }) => {
   const blogs = useSelector(state => state.blogs)
   const [users, setUsers] = useState({})
 
@@ -25,7 +26,11 @@ const Users = () => {
 
   return (
     <div>
+      <LoggedInStatus handleLogout={handleLogout} />
+
       <h1>Users</h1>
+      <h3>Created by ddc</h3>
+
       <table>
         <thead>
           <tr>
