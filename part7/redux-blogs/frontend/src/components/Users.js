@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import LoggedInStatus from './LoggedInStatus'
+import { Link } from 'react-router-dom'
 
 const Users = ({ handleLogout }) => {
   const blogs = useSelector(state => state.blogs)
@@ -43,7 +44,7 @@ const Users = ({ handleLogout }) => {
             .sort()
             .map(userName =>
               <tr key={userName}>
-                <td>{userName}</td>
+                <td><Link to={`/users/${users[userName].id}`}>{userName}</Link></td>
                 <td>{users[userName].count}</td>
               </tr>
             )}

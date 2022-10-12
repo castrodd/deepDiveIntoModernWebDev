@@ -7,6 +7,7 @@ import LoginForm from './components/LoginForm'
 import LoggedInStatus from './components/LoggedInStatus'
 import Notification from './components/Notification'
 import Toggle from './components/Toggle'
+import User from './components/User'
 import Users from './components/Users'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -174,7 +175,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/blogs" element={<Home />} />
-        <Route path="/users" element={<Users handleLogout={handleLogout}/>} />
+        <Route path="/users" element={<Users handleLogout={handleLogout} />} />
+        <Route path="/users/:id" element={<User blogs={blogs} />} />
       </Routes>
     </Router>
   )
