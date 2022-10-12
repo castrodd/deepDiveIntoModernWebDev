@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 
-const LoggedInStatus = (handleLogout) => {
+const LoggedInStatus = ({ handleLogout }) => {
   const user = useSelector(state => state.user)
 
   return (
