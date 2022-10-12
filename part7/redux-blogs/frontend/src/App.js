@@ -1,25 +1,22 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
-import LoginForm from './components/LoginForm'
-import LoggedInStatus from './components/LoggedInStatus'
 import Notification from './components/Notification'
 import Toggle from './components/Toggle'
 import User from './components/User'
 import Users from './components/Users'
 import blogService from './services/blogs'
-import loginService from './services/login'
 import { setBlogs } from './reducers/blogsReducer'
-import { setNotification } from './reducers/notificationsReducer'
 import { setUser } from './reducers/userReducer'
+import { setNotification } from './reducers/notificationsReducer'
 import './index.css'
+import LoggedInStatus from './components/LoggedInStatus'
 
 const App = () => {
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
-  const [loggedIn, setLoggedIn] = useState(false)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -31,37 +28,13 @@ const App = () => {
   useEffect(() => {
     const loggedInUser = window.localStorage.getItem('user')
     if (loggedInUser) {
-      const user = JSON.parse(loggedInUser)
-      dispatch(setUser(user))
-      blogService.setToken(user.token)
-      setLoggedIn(true)
+      const currUser = JSON.parse(loggedInUser)
+      dispatch(setUser(currUser))
+      blogService.setToken(currUser.token)
     }
   }, [dispatch])
 
   const blogFormRef = useRef()
-
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    try {
-      const user = await loginService.login({
-        username: event.target[0].value,
-        password: event.target[1].value
-      })
-      window.localStorage.setItem('user', JSON.stringify(user))
-      blogService.setToken(user.token)
-      dispatch(setUser(user))
-      setLoggedIn(true)
-      dispatch(setNotification('notice', 'You are now logged in!', 5))
-    } catch (exception) {
-      dispatch(setNotification('error', 'Wrong credentials!', 5))
-      setLoggedIn(false)
-    }
-  }
-
-  const handleLogout = () => {
-    dispatch(setUser(null))
-    setLoggedIn(false)
-  }
 
   const createBlog = async (blog) => {
     try {
@@ -124,10 +97,8 @@ const App = () => {
     return ''
   }
 
-  const blogsForm = () => (
+  const BlogsForm = () => (
     <div>
-      <LoggedInStatus handleLogout={handleLogout} />
-
       <h1>Blogs</h1>
       <h3>Created by ddc</h3>
 
@@ -143,21 +114,24 @@ const App = () => {
     </div>
   )
 
-  const loginForm = () => (
-    <Toggle buttonLabel="login">
-      <LoginForm
-        handleLogin={handleLogin}
-      />
-    </Toggle>
-  )
-
   const Home = () => (
     <div>
       <Notification />
-      {loggedIn
-        ? blogsForm()
-        : loginForm()
-      }
+      {user && <BlogsForm />}
+    </div>
+  )
+
+  const UsersTab = () => (
+    <div>
+      <Notification />
+      {user && <Users />}
+    </div>
+  )
+
+  const UserTab = () => (
+    <div>
+      <Notification />
+      {user && <User blogs={blogs} />}
     </div>
   )
 
@@ -170,13 +144,14 @@ const App = () => {
       <div>
         <Link style={linkStyling} to="/blogs">Blogs</Link>
         <Link style={linkStyling} to="/users">Users</Link>
+        <LoggedInStatus />
       </div>
 
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/blogs" element={<Home />} />
-        <Route path="/users" element={<Users handleLogout={handleLogout} />} />
-        <Route path="/users/:id" element={<User blogs={blogs} />} />
+        <Route path="/users" element={<UsersTab />} />
+        <Route path="/users/:id" element={<UserTab />} />
       </Routes>
     </Router>
   )

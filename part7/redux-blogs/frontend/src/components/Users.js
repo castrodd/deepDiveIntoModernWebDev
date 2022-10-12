@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import LoggedInStatus from './LoggedInStatus'
 import { Link } from 'react-router-dom'
 
 const Users = ({ handleLogout }) => {
@@ -27,7 +26,6 @@ const Users = ({ handleLogout }) => {
 
   return (
     <div>
-      <LoggedInStatus handleLogout={handleLogout} />
 
       <h1>Users</h1>
       <h3>Created by ddc</h3>
