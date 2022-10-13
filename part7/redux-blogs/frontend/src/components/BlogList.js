@@ -13,7 +13,7 @@ const BlogList = ({
       {sortableBlogs
         .sort((x, y) => y.likes - x.likes)
         .map(blog =>
-          <div key={blog.title}>
+          <div className='blogs' key={blog.title}>
             <Link
               key={blog.title}
               to={`/blogs/${blog._id}`}>

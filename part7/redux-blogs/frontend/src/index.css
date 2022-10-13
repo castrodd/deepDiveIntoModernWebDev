@@ -21,3 +21,20 @@
 .blog span {
   font-weight: bold;
 }
+
+.status {
+  display: inline-flex;
+}
+
+.nav-bar {
+  background-color: thistle;
+}
+
+.blogs {
+  padding: 15px;
+  border: solid;
+}
+
+.new-button {
+  margin: 5px;
+}

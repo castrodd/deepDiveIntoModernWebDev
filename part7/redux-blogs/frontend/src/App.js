@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Blog from './components/Blog'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
+import LoggedInStatus from './components/LoggedInStatus'
 import Notification from './components/Notification'
 import Toggle from './components/Toggle'
 import User from './components/User'
@@ -13,7 +14,6 @@ import { setBlogs } from './reducers/blogsReducer'
 import { setUser } from './reducers/userReducer'
 import { setNotification } from './reducers/notificationsReducer'
 import './index.css'
-import LoggedInStatus from './components/LoggedInStatus'
 
 const App = () => {
   const blogs = useSelector(state => state.blogs)
@@ -149,7 +149,7 @@ const App = () => {
 
   return (
     <Router>
-      <div>
+      <div className='nav-bar'>
         <Link style={linkStyling} to="/blogs">Blogs</Link>
         <Link style={linkStyling} to="/users">Users</Link>
         <LoggedInStatus />

@@ -45,7 +45,7 @@ const LoggedInStatus = () => {
   }
 
   return (
-    <div>
+    <div className='status'>
       <h4>Logged in as {user.username}
         <button onClick={handleLogout}>logout</button>
       </h4>
