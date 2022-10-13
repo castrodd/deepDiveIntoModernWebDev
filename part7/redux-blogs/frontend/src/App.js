@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import Blog from './components/Blog'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
@@ -121,6 +122,13 @@ const App = () => {
     </div>
   )
 
+  const BlogTab = () => (
+    <div>
+      <Notification />
+      {user && <Blog modifyBlog={modifyBlog} deleteBlog={deleteBlog} />}
+    </div>
+  )
+
   const UsersTab = () => (
     <div>
       <Notification />
@@ -131,7 +139,7 @@ const App = () => {
   const UserTab = () => (
     <div>
       <Notification />
-      {user && <User blogs={blogs} />}
+      {user && <User />}
     </div>
   )
 
@@ -150,6 +158,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/blogs" element={<Home />} />
+        <Route path="/blogs/:id" element={<BlogTab />} />
         <Route path="/users" element={<UsersTab />} />
         <Route path="/users/:id" element={<UserTab />} />
       </Routes>

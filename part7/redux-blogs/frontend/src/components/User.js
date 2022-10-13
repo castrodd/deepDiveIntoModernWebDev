@@ -1,7 +1,9 @@
 import { useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
-const User = ({ blogs }) => {
+const User = () => {
   const id = useParams().id
+  const blogs = useSelector(state => state.blogs)
 
   if (!blogs.length) {
     return <div>Data not loaded. Navigate from Users tab.</div>
