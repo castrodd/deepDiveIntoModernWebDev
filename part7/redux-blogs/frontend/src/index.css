@@ -27,11 +27,12 @@
 }
 
 .nav-bar {
-  background-color: thistle;
+  background-color: #2677be;
 }
 
 .blogs {
   padding: 15px;
+  margin: 5px;
   border: solid;
 }
 
