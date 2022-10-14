@@ -50,12 +50,12 @@ const Blog = ({ modifyBlog, deleteBlog }) => {
   return (
     <div className='blog' id='full-blog' style={blogStyle}>
       <h3>{blog.title}</h3>
-      <h4>By: {blog.author}</h4>
-      <h4> URL: {blog.url}</h4>
-      <h4>Likes: {blog.likes}
+      <p>By: {blog.author}</p>
+      <p> URL: {blog.url}</p>
+      <p>Likes: {blog.likes}
         <button id='like-button' onClick={addLike}>Like</button><br />
-      </h4>
-      <h4>Added by {blog.user.name ?? 'Unknown'}</h4>
+      </p>
+      <p>Added by {blog.user.name ?? 'Unknown'}</p>
       <button id='remove-button' onClick={removeBlog}>Remove</button>
 
       <h3>Comments</h3>

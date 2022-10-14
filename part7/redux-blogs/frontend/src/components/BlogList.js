@@ -1,10 +1,6 @@
 import { Link } from 'react-router-dom'
 
-const BlogList = ({
-  blogs,
-  deleteBlog,
-  modifyBlog
-}) => {
+const BlogList = ({ blogs }) => {
 
   const sortableBlogs = [...blogs]
 

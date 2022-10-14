@@ -14,8 +14,8 @@ const User = () => {
 
   return (
     <div>
-      <h1>{userName}</h1>
-      <h2>Added Blogs</h2>
+      <h3>{userName}</h3>
+      <h4>Added Blogs</h4>
       <ul>
         {blogsByUser.map(blog => <li key={blog.title}>{blog.title}</li> )}
       </ul>

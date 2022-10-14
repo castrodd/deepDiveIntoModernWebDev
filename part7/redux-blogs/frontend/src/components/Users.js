@@ -27,8 +27,8 @@ const Users = ({ handleLogout }) => {
   return (
     <div>
 
-      <h1>Users</h1>
-      <h3>Created by ddc</h3>
+      <h3>Users</h3>
+      <p>Created by ddc</p>
 
       <table>
         <thead>

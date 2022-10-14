@@ -100,8 +100,8 @@ const App = () => {
 
   const BlogsForm = () => (
     <div>
-      <h1>Blogs</h1>
-      <h3>Created by ddc</h3>
+      <h3>Blogs</h3>
+      <p>Created by ddc</p>
 
       <Toggle buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm createBlog={createBlog} />
@@ -149,19 +149,21 @@ const App = () => {
 
   return (
     <Router>
-      <div className='nav-bar'>
-        <Link style={linkStyling} to="/blogs">Blogs</Link>
-        <Link style={linkStyling} to="/users">Users</Link>
-        <LoggedInStatus />
-      </div>
+      <div className='container'>
+        <div className='nav-bar'>
+          <Link style={linkStyling} to="/blogs">Blogs</Link>
+          <Link style={linkStyling} to="/users">Users</Link>
+          <LoggedInStatus />
+        </div>
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/blogs" element={<Home />} />
-        <Route path="/blogs/:id" element={<BlogTab />} />
-        <Route path="/users" element={<UsersTab />} />
-        <Route path="/users/:id" element={<UserTab />} />
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/blogs" element={<Home />} />
+          <Route path="/blogs/:id" element={<BlogTab />} />
+          <Route path="/users" element={<UsersTab />} />
+          <Route path="/users/:id" element={<UserTab />} />
+        </Routes>
+      </div>
     </Router>
   )
 }
