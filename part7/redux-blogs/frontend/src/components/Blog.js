@@ -37,10 +37,24 @@ const Blog = ({ modifyBlog, deleteBlog }) => {
       <h3>{blog.title}</h3>
       <h4>By: {blog.author}</h4>
       <h4> URL: {blog.url}</h4>
-      <h4>Likes: {blog.likes} </h4>
-      <button id='like-button' onClick={addLike}>Like</button><br/>
+      <h4>Likes: {blog.likes}
+        <button id='like-button' onClick={addLike}>Like</button><br />
+      </h4>
+      <h4>Added by {blog.user.name}</h4>
       <button id='remove-button' onClick={removeBlog}>Remove</button>
-    </div>
+
+      <h3>Comments</h3>
+
+      {blog.comments.length > 0 &&
+        < div >
+          <ul>
+            {blog.comments.map(comment => <li key={comment}>{comment}</li>)}
+          </ul>
+        </div>
+      }
+
+      {blog.comments.length === 0 && <div>No comments posted yet.</div>}
+    </div >
   )
 }
 
