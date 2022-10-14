@@ -1,9 +1,10 @@
 import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 const Blog = ({ modifyBlog, deleteBlog }) => {
   const id = useParams().id
+  const navigate = useNavigate()
   const blogs = useSelector(state => state.blogs)
   const blog = blogs.filter(blog => blog._id === id)[0]
 
@@ -36,6 +37,7 @@ const Blog = ({ modifyBlog, deleteBlog }) => {
 
   const removeBlog = async (event) => {
     event.preventDefault()
+    navigate('/')
     await deleteBlog(blog)
   }
 

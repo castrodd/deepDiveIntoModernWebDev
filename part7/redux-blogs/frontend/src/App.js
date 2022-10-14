@@ -72,13 +72,12 @@ const App = () => {
         throw Error('Permission denied to remove blog!')
       }
 
-      blogFormRef.current.toggleVisible()
       await blogService.remove(blog._id)
       dispatch(setNotification('notice', 'Blog deleted', 5))
       dispatch(setBlogs(blogs.filter(currBlog => currBlog._id !== blog._id)))
     }
     catch (exception) {
-      dispatch(setNotification('error', 'Unable to delete blog', 5))
+      dispatch(setNotification('error', 'Unable to delete blog!', 5))
     }
   }
 
