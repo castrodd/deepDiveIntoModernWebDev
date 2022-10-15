@@ -2,5 +2,18 @@
   "dependencies": {
     "apollo-server": "^3.10.3",
     "graphql": "^16.6.0"
-  }
+  },
+  "name": "gql-starter",
+  "version": "1.0.0",
+  "main": "library.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "npm test"
+  },
+  "keywords": [
+    "graphQL"
+  ],
+  "author": "ddc",
+  "license": "MIT",
+  "description": ""
 }
