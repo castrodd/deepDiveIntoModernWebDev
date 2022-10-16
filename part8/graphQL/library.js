@@ -16,11 +16,11 @@ let authors = [
     id: "afa5b6f1-344d-11e9-a414-719c6709cf3e",
     born: 1821
   },
-  { 
+  {
     name: 'Joshua Kerievsky', // birthyear not known
     id: "afa5b6f2-344d-11e9-a414-719c6709cf3e",
   },
-  { 
+  {
     name: 'Sandi Metz', // birthyear not known
     id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
   },
@@ -68,7 +68,7 @@ let books = [
     author: 'Joshua Kerievsky',
     id: "afa5de01-344d-11e9-a414-719c6709cf3e",
     genres: ['refactoring', 'patterns']
-  },  
+  },
   {
     title: 'Practical Object-Oriented Design, An Agile Primer Using Ruby',
     published: 2012,
@@ -93,12 +93,52 @@ let books = [
 ]
 
 const typeDefs = gql`
+  type Book {
+    title: String
+    published: Int
+    author: String
+    id: String
+    genres: [String]
+  }
+
+  type Author {
+    name: String!,
+    id: String,
+    bookCount: Int
+  }
+
   type Query {
+    bookCount: Int
+    authorCount: Int
+    allBooks(author: String, genre: String): [Book]!
+    allAuthors(name: String): [Author]!
   }
 `
 
 const resolvers = {
   Query: {
+    bookCount: () => books.length,
+    authorCount: () => authors.length,
+    allBooks: (root, args) => {
+      let results = [...books]
+      if (args.author) {
+        results = results
+          .filter(book => args.author === book.author)
+      }
+      if (args.genre) {
+        results = results
+          .filter(book => book.genres.includes(args.genre))
+      }
+      return results
+    },
+    allAuthors: (root, args) => authors
+      .filter(author => author.name === args.name)
+      .map(author => {
+        return {
+          name: author.name,
+          bookCount: books.reduce((prev, curr) => curr.author === author.name ? prev + 1 : prev, 0)
+        }
+      })
   }
 }
 
