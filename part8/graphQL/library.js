@@ -104,6 +104,7 @@ const typeDefs = gql`
 
   type Author {
     name: String!,
+    born: Int,
     id: String,
     bookCount: Int
   }
@@ -116,6 +117,13 @@ const typeDefs = gql`
   }
 
   type Mutation {
+    addAuthor(
+      name: String!
+    ): Author
+    editAuthor(
+      name: String!,
+      setBornTo: Int!
+    ): Author
     addBook(
       title: String!,
       published: Int! 
@@ -123,12 +131,17 @@ const typeDefs = gql`
       genres: [String]!): Book
   }
 `
+const _addAuthor = (_, args) => {
+  const author = { ...args, id: uuid() }
+  authors = authors.concat(author)
+  return author
+}
 
 const resolvers = {
   Query: {
     bookCount: () => books.length,
     authorCount: () => authors.length,
-    allBooks: (root, args) => {
+    allBooks: (_, args) => {
       let results = [...books]
       if (args.author) {
         results = results
@@ -140,29 +153,54 @@ const resolvers = {
       }
       return results
     },
-    allAuthors: (root, args) => authors
-      .filter(author => author.name === args.name)
-      .map(author => {
+    allAuthors: (_, args) => {
+      let results = [...authors]
+      if (args.name) {
+        results = results
+          .filter(author => author.name === args.name)
+      }
+      return results.map(author => {
         return {
           name: author.name,
+          born: author.born,
           bookCount: books.reduce((prev, curr) => curr.author === author.name ? prev + 1 : prev, 0)
         }
       })
+        
+    }
   },
-  Mutation: {
-    addBook: (root, args) => {
-      const book = { ...args, id: uuid() }
-      books = books.concat(book)
-      return book
+    Mutation: {
+      addAuthor: _addAuthor,
+      editAuthor: (_, args) => {
+        const currAuthor = authors.filter(author => author.name === args.name)[0]
+        if (!currAuthor) {
+          return null
+        }
+
+        newAuthor = {...currAuthor, born: args.setBornTo}
+        authors = authors.map(author => author.name === args.name 
+          ? newAuthor
+          : author)
+        
+        return newAuthor
+      },
+      addBook: (_, args) => {
+        const existingAuthor = authors.filter(author => author.name === args.author).length > 0
+        if (!existingAuthor) {
+          _addAuthor(null, { name: args.author })
+        }
+        const book = { ...args, id: uuid() }
+        books = books.concat(book)
+        return book
+      }
     }
   }
-}
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-})
+    typeDefs,
+    resolvers,
+  })
 
 server.listen().then(({ url }) => {
-  console.log(`Server ready at ${url}`)
-})
+    console.log(`Server ready at ${url}`)
+  })
