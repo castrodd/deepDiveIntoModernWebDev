@@ -13,7 +13,7 @@ const client = new ApolloClient({
 
 client.query({ query: ALL_AUTHORS })
   .then((response) => {
-    console.log('DATA', response.data)
+    console.log(response.data)
   })
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />)
