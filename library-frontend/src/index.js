@@ -1,7 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
-import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
+import { 
+  ApolloClient, 
+  ApolloProvider,
+  HttpLink, 
+  InMemoryCache 
+} from '@apollo/client'
 import { ALL_AUTHORS } from './queries'
 
 const client = new ApolloClient({
@@ -11,9 +16,8 @@ const client = new ApolloClient({
   })
 })
 
-client.query({ query: ALL_AUTHORS })
-  .then((response) => {
-    console.log(response.data)
-  })
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  )
