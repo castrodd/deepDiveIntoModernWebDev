@@ -7,7 +7,6 @@ import {
   HttpLink, 
   InMemoryCache 
 } from '@apollo/client'
-import { ALL_AUTHORS } from './queries'
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
