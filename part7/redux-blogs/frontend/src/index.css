@@ -1,0 +1,41 @@
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.notice {
+  color: green;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.blog span {
+  font-weight: bold;
+}
+
+.status {
+  display: inline-flex;
+}
+
+.nav-bar {
+  background-color: #2677be;
+}
+
+.blogs {
+  padding: 15px;
+  margin: 5px;
+  border: solid;
+}
+
+.new-button {
+  margin: 5px;
+}
