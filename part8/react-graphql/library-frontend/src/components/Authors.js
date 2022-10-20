@@ -4,7 +4,10 @@ import { ALL_AUTHORS, ADD_BIRTH_YEAR } from '../queries'
 
 const Authors = (props) => {
   const authors = useQuery(ALL_AUTHORS, { pollInterval: 2000 })
-  const [ addBirthYear ] = useMutation(ADD_BIRTH_YEAR)
+  const [addBirthYear] = useMutation(ADD_BIRTH_YEAR, {
+    refetchQueries: [ { query: ALL_AUTHORS } ]
+  })
+
   const [name, setName] = useState('')
   const [birthYear, setBirthYear] = useState('')
 
@@ -14,9 +17,9 @@ const Authors = (props) => {
 
   const submit = async (event) => {
     event.preventDefault()
-    
+
     const born = Number(birthYear)
-    addBirthYear({ variables: { name, born }})
+    addBirthYear({ variables: { name, born } })
 
     setName('')
     setBirthYear('')
@@ -44,13 +47,14 @@ const Authors = (props) => {
 
       <h3>Add birth year</h3>
       <form onSubmit={submit}>
-      <div>
+        <label>
           Name
-          <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
-        </div>
+          <select value={name} onChange={({ target }) => setName(target.value)}>
+            {authors.data.allAuthors.map((a) => (
+              <option value={a.name}>{a.name}</option>
+            ))}
+          </select>
+        </label>
         <div>
           Birth year
           <input
