@@ -1,11 +1,25 @@
-import { useQuery } from '@apollo/client'
-import { ALL_AUTHORS } from '../queries'
+import { useMutation, useQuery } from '@apollo/client'
+import { useState } from 'react'
+import { ALL_AUTHORS, ADD_BIRTH_YEAR } from '../queries'
 
 const Authors = (props) => {
   const authors = useQuery(ALL_AUTHORS, { pollInterval: 2000 })
+  const [ addBirthYear ] = useMutation(ADD_BIRTH_YEAR)
+  const [name, setName] = useState('')
+  const [birthYear, setBirthYear] = useState('')
 
   if (!props.show || authors.loading) {
     return null
+  }
+
+  const submit = async (event) => {
+    event.preventDefault()
+    
+    const born = Number(birthYear)
+    addBirthYear({ variables: { name, born }})
+
+    setName('')
+    setBirthYear('')
   }
 
   return (
@@ -27,6 +41,25 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
+
+      <h3>Add birth year</h3>
+      <form onSubmit={submit}>
+      <div>
+          Name
+          <input
+            value={name}
+            onChange={({ target }) => setName(target.value)}
+          />
+        </div>
+        <div>
+          Birth year
+          <input
+            value={birthYear}
+            onChange={({ target }) => setBirthYear(target.value)}
+          />
+        </div>
+        <button type="submit">Set birth year</button>
+      </form>
     </div>
   )
 }
