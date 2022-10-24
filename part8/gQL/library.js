@@ -1,8 +1,17 @@
 const { ApolloServer, gql, UserInputError } = require('apollo-server')
+const { PASSWORD } = require('./config')
 const mongoose = require('mongoose')
 const Author = require('./models/author')
 const Book = require('./models/book')
 const { v1: uuid } = require('uuid')
+
+const MONGODB_URI = `mongodb+srv://modernwebmongodb:${PASSWORD}@cluster0.tdqhuhf.mongodb.net/library?retryWrites=true&w=majority`
+
+console.log(`connecting to database...`)
+
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('connected to mongo'))
+  .catch((error) => console.log('error connecting...', error.message))
 
 let authors = [
   {
@@ -128,8 +137,8 @@ const _addAuthor = (_, args) => {
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
+    bookCount: () => Book.collection.countDocuments(),
+    authorCount: () => Author.collection.countDocuments(),
     allBooks: (_, args) => {
       let results = [...books]
       if (args.author) {

@@ -1,12 +1,13 @@
 {
   "dependencies": {
     "apollo-server": "^3.10.3",
-    "graphql": "^16.6.0"
+    "dotenv": "^16.0.3",
+    "graphql": "^16.6.0",
+    "mongoose": "^6.6.7"
   },
   "name": "gql-starter",
   "version": "1.0.0",
   "main": "library.js",
-  "devDependencies": {},
   "scripts": {
     "test": "npm test"
   },
