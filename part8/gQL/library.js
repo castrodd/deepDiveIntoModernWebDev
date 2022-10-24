@@ -5,10 +5,8 @@ const Author = require('./models/author')
 const Book = require('./models/book')
 const { v1: uuid } = require('uuid')
 
-const MONGODB_URI = `mongodb+srv://modernwebmongodb:${PASSWORD}@cluster0.tdqhuhf.mongodb.net/library?retryWrites=true&w=majority`
-
 console.log(`connecting to database...`)
-
+const MONGODB_URI = `mongodb+srv://modernwebmongodb:${PASSWORD}@cluster0.tdqhuhf.mongodb.net/library?retryWrites=true&w=majority`
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('connected to mongo'))
   .catch((error) => console.log('error connecting...', error.message))
