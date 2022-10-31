@@ -3,18 +3,19 @@ const mongoose = require('mongoose')
 const schema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   published: {
     type: Number
   },
   author: {
-    type: String,
-    required: true
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Author'
   },
-  genres: {
-    type: [String]
-  }
+  genres: [{
+    type: String
+  }]
 })
 
 module.exports = mongoose.model('Book', schema)
