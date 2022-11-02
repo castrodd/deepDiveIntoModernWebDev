@@ -124,13 +124,12 @@ const typeDefs = gql`
       title: String!,
       published: Int! 
       author: String!,
-      genres: [String]!): Book
+      genres: [String]!): Book!
   }
 `
-const _addAuthor = (_, args) => {
-  const author = { ...args, id: uuid() }
-  authors = authors.concat(author)
-  return author
+const _addAuthor = async (_, args) => {
+  const author = new Author({ ...args })
+  return author.save()
 }
 
 const resolvers = {
@@ -167,27 +166,19 @@ const resolvers = {
   },
     Mutation: {
       addAuthor: _addAuthor,
-      editAuthor: (_, args) => {
-        const currAuthor = authors.filter(author => author.name === args.name)[0]
-        if (!currAuthor) {
-          return null
-        }
-
-        newAuthor = {...currAuthor, born: args.setBornTo}
-        authors = authors.map(author => author.name === args.name 
-          ? newAuthor
-          : author)
-        
-        return newAuthor
+      editAuthor: async (_, args) => {
+        const author = await Author.findOne({ name: args.name })
+        author.born = args.setBornTo
+        return author.save()
       },
-      addBook: (_, args) => {
-        const existingAuthor = authors.filter(author => author.name === args.author).length > 0
-        if (!existingAuthor) {
+      addBook: async (_, args) => {
+        const author = await Author.findOne({ name: args.author })
+        if (!author) {
           _addAuthor(null, { name: args.author })
         }
-        const book = { ...args, id: uuid() }
-        books = books.concat(book)
-        return book
+
+        const book = new Book({ ...args })
+        return book.save()
       }
     }
   }
