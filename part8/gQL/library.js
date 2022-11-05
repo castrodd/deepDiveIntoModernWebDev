@@ -12,6 +12,16 @@ mongoose.connect(MONGODB_URI)
   .catch((error) => console.log("error connecting...", error.message))
 
 const typeDefs = gql`
+  type User {
+    username: String!
+    friends: [Person!]!
+    id: ID!
+  }
+
+  type Token {
+    value: String!
+  }
+
   type Book {
     title: String!
     published: Int!
@@ -32,6 +42,7 @@ const typeDefs = gql`
     authorCount: Int
     allBooks(author: String, genre: String): [Book]!
     allAuthors(name: String): [Author]!
+    me: User
   }
 
   type Mutation {
@@ -48,6 +59,13 @@ const typeDefs = gql`
       published: Int! 
       author: String!,
       genres: [String]!): Book!
+    createUser(
+      username: String!
+    ): User
+    login(
+      username: String!
+      password: String!
+    ): Token
   }
 `
 const _addAuthor = async (_, args) => {
