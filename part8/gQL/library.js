@@ -3,7 +3,8 @@ const { PASSWORD } = require("./config")
 const mongoose = require("mongoose")
 const Author = require("./models/author")
 const Book = require("./models/book")
-const { v1: uuid } = require("uuid")
+const jwt = require('jsonwebtoken')
+const JWT_SECRET = 'THIS_IS_MY_SECRET'
 
 console.log(`connecting to database...`)
 const MONGODB_URI = `mongodb+srv://modernwebmongodb:${PASSWORD}@cluster0.tdqhuhf.mongodb.net/library?retryWrites=true&w=majority`
@@ -144,7 +145,31 @@ const resolvers = {
         }
 
         return book
-      }
+      },
+      createUser: async (root, args) => {
+        const user = new User({ username: args.username })
+    
+        return user.save()
+          .catch(error => {
+            throw new UserInputError(error.message, {
+              invalidArgs: args,
+            })
+          })
+      },
+      login: async (root, args) => {
+        const user = await User.findOne({ username: args.username })
+    
+        if ( !user || args.password !== 'secret' ) {
+          throw new UserInputError("wrong credentials")
+        }
+    
+        const userForToken = {
+          username: user.username,
+          id: user._id,
+        }
+    
+        return { value: jwt.sign(userForToken, JWT_SECRET) }
+      },
     }
   }
 
