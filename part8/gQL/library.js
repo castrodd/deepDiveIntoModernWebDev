@@ -3,6 +3,7 @@ const { PASSWORD } = require("./config")
 const mongoose = require("mongoose")
 const Author = require("./models/author")
 const Book = require("./models/book")
+const User = require("./models/user")
 const jwt = require('jsonwebtoken')
 const JWT_SECRET = 'THIS_IS_MY_SECRET'
 
