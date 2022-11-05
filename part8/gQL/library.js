@@ -115,8 +115,10 @@ const resolvers = {
             curr.author.name == author.name ? prev + 1 : prev, 0
           )
         }
-      })
-        
+      })   
+    },
+    me: (root, args, context) => {
+      return context.currentUser
     }
   },
     Mutation: {
