@@ -52,7 +52,15 @@ const typeDefs = gql`
 `
 const _addAuthor = async (_, args) => {
   const author = new Author({ ...args })
-  return author.save()
+  try {
+    await author.save()
+  } catch (error) {
+    throw new UserInputError(error.message, {
+      invalidArgs: args
+    })
+  }
+
+  return author
 }
 
 const resolvers = {
@@ -97,11 +105,27 @@ const resolvers = {
       editAuthor: async (_, args) => {
         const author = await Author.findOne({ name: args.name })
         author.born = args.setBornTo
-        return author.save()
+        try {
+          await author.save()
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args
+          })
+        }
+
+        return author
       },
       addBook: async (_, args) => {
         const book = new Book({ ...args })
-        return book.save()
+        try {
+          await book.save()          
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args
+          })
+        }
+
+        return book
       }
     }
   }
