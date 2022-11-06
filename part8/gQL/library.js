@@ -113,7 +113,8 @@ const resolvers = {
           born: author.born,
           bookCount: books.reduce((prev, curr) => 
             curr.author.name == author.name ? prev + 1 : prev, 0
-          )
+          ),
+          id: author.id
         }
       })   
     },

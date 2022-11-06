@@ -36,7 +36,7 @@ const Authors = (props) => {
             <th>books</th>
           </tr>
           {authors.data.allAuthors.map((a) => (
-            <tr key={a.name}>
+            <tr key={a.id}>
               <td>{a.name}</td>
               <td>{a.born || '?'}</td>
               <td>{a.bookCount}</td>
@@ -51,7 +51,7 @@ const Authors = (props) => {
           Name
           <select value={name} onChange={({ target }) => setName(target.value)}>
             {authors.data.allAuthors.map((a) => (
-              <option value={a.name}>{a.name}</option>
+              <option key={a.id} value={a.name}>{a.name}</option>
             ))}
           </select>
         </label>
