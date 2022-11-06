@@ -123,7 +123,10 @@ const resolvers = {
   },
     Mutation: {
       addAuthor: _addAuthor,
-      editAuthor: async (_, args) => {
+      editAuthor: async (_, args, context) => {
+        if (!context.currentUser) {
+          throw Error('Must have a valid token.')
+        }
         const author = await Author.findOne({ name: args.name })
         author.born = args.setBornTo
         try {
@@ -136,7 +139,10 @@ const resolvers = {
 
         return author
       },
-      addBook: async (_, args) => {
+      addBook: async (_, args, context) => {
+        if (!context.currentUser) {
+          throw Error('Must have a valid token.')
+        }
         const book = new Book({ ...args })
         try {
           await book.save()          
