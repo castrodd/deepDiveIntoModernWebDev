@@ -52,3 +52,14 @@ export const ADD_BIRTH_YEAR = gql`
     }
   }
 `
+
+export const LOGIN = gql`
+  mutation loginUser($username: String!, $password: String!){
+    login (
+      username: $username
+      password: $password
+    ) {
+      value
+    }
+  }
+`
