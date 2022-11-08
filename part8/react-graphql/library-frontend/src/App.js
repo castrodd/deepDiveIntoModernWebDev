@@ -6,6 +6,13 @@ import NewBook from './components/NewBook'
 
 const App = () => {
   const [page, setPage] = useState('authors')
+  const [token, setToken] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
+
+  const logout = () => {
+    setToken(null)
+    localStorage.clear()
+  }
 
   return (
     <div>
@@ -13,13 +20,20 @@ const App = () => {
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
         <button onClick={() => setPage('add')}>add book</button>
-        <button onClick={() => setPage('login')}>login</button>
+        {token 
+          ? <button onClick={() => logout()}>logout</button>
+          : <button onClick={() => setPage('login')}>login</button>
+        }
       </div>
 
       <Authors show={page === 'authors'} />
       <Books show={page === 'books'} />
       <NewBook show={page === 'add'} />
-      <Login show={page === 'login'} />
+      <Login 
+          show={page === 'login'}
+          setToken={setToken} 
+          setError={setErrorMessage}
+          setPage={setPage} />
     </div>
   )
 }
