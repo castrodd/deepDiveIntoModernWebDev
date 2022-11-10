@@ -145,6 +145,13 @@ const resolvers = {
           throw Error('Must have a valid token.')
         }
         const book = new Book({ ...args })
+        let author = await Author.findOne({ name: args.author })
+        if (!author) {
+          author = new Author({ name: args.author })
+          await author.save()
+        }
+
+        book.author = author.id
         try {
           await book.save()          
         } catch (error) {
