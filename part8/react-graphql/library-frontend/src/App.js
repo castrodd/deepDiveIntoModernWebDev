@@ -34,12 +34,15 @@ const App = () => {
 
       <Authors show={page === 'authors'} />
       <Books show={page === 'books'} />
-      <NewBook show={page === 'add'} />
+      <NewBook 
+        show={page === 'add'}
+        setError={setErrorMessage}
+        setPage={setPage} />
       <Login 
-          show={page === 'login'}
-          setToken={setToken} 
-          setError={setErrorMessage}
-          setPage={setPage} />
+        show={page === 'login'}
+        setToken={setToken} 
+        setError={setErrorMessage}
+        setPage={setPage} />
     </div>
   )
 }
