@@ -4,7 +4,6 @@ import App from './App'
 import { setContext } from '@apollo/client/link/context'
 import { 
   ApolloClient,
-  ApolloLink,
   ApolloProvider,
   HttpLink, 
   InMemoryCache,
