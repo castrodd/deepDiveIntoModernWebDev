@@ -1,12 +1,28 @@
 import { useQuery } from '@apollo/client'
+import { useEffect, useState } from 'react'
 import { ME } from '../queries'
 import Books from './Books'
 
 const Recommendations = (props) => {
-  const genres = useQuery(ME, { pollInterval: 2000 })
+  const genres = useQuery(ME, { pollInterval: 1000 })
+  const [ favoriteGenre, setFavoriteGenre ] = useState(null)
 
-  if (!props.show || genres.loading) {
+  useEffect(() => {
+    if (genres.data && genres.data.me) {
+      setFavoriteGenre(genres.data.me.genres[0])
+    } else {
+      setFavoriteGenre(null)
+    } // eslint-disable-next-line
+  }, [genres.data])
+
+  if (!props.show) {
     return null
+  }
+
+  if (favoriteGenre === null) {
+    return (
+      <h4>Must be logged in to view this page!</h4>
+    )
   }
 
   return (
@@ -14,11 +30,11 @@ const Recommendations = (props) => {
       <h2>Recommendations</h2>
 
       <p>Books in your favorite genre: &nbsp;
-        <strong>{genres.data.me.genres[0]}</strong></p>
+        <strong>{favoriteGenre}</strong></p>
 
       <Books 
         show={true} 
-        defaultGenre={genres.data.me.genres[0]}
+        defaultGenre={favoriteGenre}
         showGenreFilters={false} />
     </div>
   )

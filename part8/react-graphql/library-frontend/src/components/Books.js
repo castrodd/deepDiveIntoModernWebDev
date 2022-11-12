@@ -10,7 +10,7 @@ const Books = (props) => {
   useEffect(() => {
     if (props.defaultGenre) {
       setGenreFilter(props.defaultGenre)
-    }
+    } // eslint-disable-next-line
   }, [])
 
   if (!props.show || books.loading) {
