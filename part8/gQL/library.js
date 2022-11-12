@@ -13,6 +13,7 @@ const { makeExecutableSchema } = require('@graphql-tools/schema')
 const express = require('express')
 const http = require('http')
 const MONGODB_URI = `mongodb+srv://modernwebmongodb:${PASSWORD}@cluster0.tdqhuhf.mongodb.net/library?retryWrites=true&w=majority`
+const JWT_SECRET = 'THIS_IS_MY_SECRET'
 
 mongoose.connect(MONGODB_URI)
   .then(() => console.log("Connected to MongoDB"))

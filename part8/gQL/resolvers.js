@@ -3,6 +3,7 @@ const pubsub = new PubSub()
 const { UserInputError } = require("apollo-server")
 const Author = require("./models/author")
 const Book = require("./models/book")
+const User = require("./models/user")
 const jwt = require('jsonwebtoken')
 const mongoose = require("mongoose")
 const JWT_SECRET = 'THIS_IS_MY_SECRET'
