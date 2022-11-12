@@ -1,3 +1,5 @@
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
 const { UserInputError } = require("apollo-server")
 const Author = require("./models/author")
 const Book = require("./models/book")
@@ -96,6 +98,8 @@ const resolvers = {
           })
         }
 
+        pubsub.publish('BOOK_ADDED', { bookAdded: book })
+
         return book
       },
       createUser: async (root, args) => {
@@ -122,7 +126,12 @@ const resolvers = {
     
         return { value: jwt.sign(userForToken, JWT_SECRET) }
       },
-    }
+    },
+    Subscription: {
+      bookAdded: {
+        subscribe: () => pubsub.asyncIterator('BOOK_ADDED')
+      },
+    },
   }
 
 module.exports = resolvers
