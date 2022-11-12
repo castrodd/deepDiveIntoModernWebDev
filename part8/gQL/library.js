@@ -16,6 +16,7 @@ mongoose.connect(MONGODB_URI)
 const typeDefs = gql`
   type User {
     username: String!
+    genres: [String!]
     id: ID!
   }
 

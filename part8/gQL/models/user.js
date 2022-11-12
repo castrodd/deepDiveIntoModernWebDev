@@ -6,7 +6,10 @@ const schema = new mongoose.Schema({
     required: true,
     unique: true,
     minlength: 3
-  }
+  },
+  genres: [{
+      type: String
+    }]
 })
 
 module.exports = mongoose.model('User', schema)
