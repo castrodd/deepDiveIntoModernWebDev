@@ -5,11 +5,12 @@ interface ExerciseSummary {
   averageTime: number;
   targetReached: boolean;
   rating: number;
-  ratingSummary: string;
+  ratingSummary: RatingText;
 }
 
-const calculateExercises = (totalDays: number[], target: number): ExerciseSummary => {
+type RatingText = "Great" | "Good" | "Poor";
 
+const calculateExercises = (totalDays: number[], target: number): ExerciseSummary => {
   const average = totalDays.reduce((total, current) => total + current)/totalDays.length;
   const ratingScore = average >= target ? 1 : average > 0 ? 2 : 3;
 
