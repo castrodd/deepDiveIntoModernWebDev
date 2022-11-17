@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bmiCalculator": "ts-node -- bmiCalculator"
+    "bmiCalculator": "ts-node -- bmiCalculator",
+    "exerciseCalculator": "ts-node -- exerciseCalculator"
   },
   "author": "Daniel Castro",
   "license": "ISC",
