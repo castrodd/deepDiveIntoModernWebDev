@@ -8,7 +8,7 @@ interface ExerciseSummary {
   ratingSummary: RatingText;
 }
 
-type RatingText = "Great" | "Good" | "Poor";
+type RatingText = "Great" | "Okay" | "Poor";
 
 const calculateExercises = (totalDays: number[], target: number): ExerciseSummary => {
   const average = totalDays.reduce((total, current) => total + current)/totalDays.length;
@@ -21,8 +21,12 @@ const calculateExercises = (totalDays: number[], target: number): ExerciseSummar
     averageTime: average,
     targetReached: average >= target,
     rating: ratingScore,
-    ratingSummary: ratingScore == 1 ? "Great" : ratingScore == 2 ? "Good" : "Poor"
+    ratingSummary: ratingScore == 1 ? "Great" : ratingScore == 2 ? "Okay" : "Poor"
   };
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+const [func, file, ...daysAndTarget] = process.argv
+const days = daysAndTarget.slice(0, daysAndTarget.length - 1).map(Number)
+const target = Number(daysAndTarget.at(-1))
+
+console.log(calculateExercises(days, target))
