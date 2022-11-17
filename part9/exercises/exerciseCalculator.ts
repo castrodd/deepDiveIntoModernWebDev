@@ -25,6 +25,10 @@ const calculateExercises = (totalDays: number[], target: number): ExerciseSummar
   };
 }
 
+if (process.argv.length < 4) {
+  throw new Error("Requires at least one day and target value!")
+}
+
 const [func, file, ...daysAndTarget] = process.argv
 const days = daysAndTarget.slice(0, daysAndTarget.length - 1).map(Number)
 const target = Number(daysAndTarget.at(-1))
