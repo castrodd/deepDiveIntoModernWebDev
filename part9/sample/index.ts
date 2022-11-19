@@ -1,4 +1,5 @@
 import express from 'express';
+import { multiplicator } from './multiplicator';
 const app = express();
 
 app.get('/ping', (_, res) => {
@@ -7,6 +8,13 @@ app.get('/ping', (_, res) => {
 
 app.get('/pong', (_, res) => {
   res.send('ping');
+});
+
+app.post('/calculate', (req, res) => {
+  const { value1, value2, op } = req.body;
+
+  const result = multiplicator(value1, value2, op);
+  res.send(result);
 });
 
 const PORT = 3003;

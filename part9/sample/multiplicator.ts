@@ -10,7 +10,7 @@ const isOperation = (string: string): boolean => {
   return ['multiply','add','divide','subtract'].includes(string)
 }
 
-const multiplicator = (a: number, b: number, op: Operation): number => {
+export const multiplicator = (a: number, b: number, op: Operation): number => {
   if (op == 'multiply') return a*b;
   if (op == 'add') return a+b;
   if (op == 'divide') return a/b;
