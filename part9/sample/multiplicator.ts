@@ -7,8 +7,8 @@ interface CommandLineArgs {
 }
 
 const isOperation = (string: string): boolean => {
-  return ['multiply','add','divide','subtract'].includes(string)
-}
+  return ['multiply','add','divide','subtract'].includes(string);
+};
 
 export const multiplicator = (a: number, b: number, op: Operation): number => {
   if (op == 'multiply') return a*b;
@@ -16,10 +16,10 @@ export const multiplicator = (a: number, b: number, op: Operation): number => {
   if (op == 'divide') return a/b;
   if (op == 'subtract') return a - b;
 
-  throw new Error(`${op} is not a valid operation.`)
-}
+  throw new Error(`${op} is not a valid operation.`);
+};
 
-const parseArguments = (args: Array<string>): CommandLineArgs => {
+const parseArguments = (_args: Array<string>): CommandLineArgs => {
   if (process.argv.length != 5) {
     throw new Error('There should be 3 arguments: num, num, op.');
   }
@@ -40,8 +40,8 @@ const parseArguments = (args: Array<string>): CommandLineArgs => {
     a: valueOne,
     b: valueTwo,
     op: valueThree as Operation
-  }
-}
+  };
+};
 
 const { a, b, op } = parseArguments(process.argv);
 console.log(multiplicator(a, b, op));
