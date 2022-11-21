@@ -28,7 +28,7 @@ app.post('/calculate', (req, res) => {
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const result = multiplicator(Number(value1), Number(value2), op);
-  res.send(result);
+  return res.send(result);
 });
 
 const PORT = 3003;
