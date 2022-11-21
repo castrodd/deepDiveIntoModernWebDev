@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "typescript": "^4.9.3"
+  },
+  "name": "sampletwo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
