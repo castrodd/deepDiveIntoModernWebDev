@@ -1,3 +1,9 @@
+export interface DiagnosisEntry {
+  code: string;
+  name: string;
+  latin?: string;
+}
+
 export interface PatientEntry {
   id: string;
   name: string;
