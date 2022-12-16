@@ -1,6 +1,7 @@
 import express from 'express';
 const app = express();
 import cors from 'cors';
+import patientsService from './services/patientsService';
 
 app.use(express.json());
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -11,6 +12,10 @@ const PORT = 3001;
 app.get('/api/ping', (_req, res) => {
   console.log('someone pinged here');
   res.send('pong');
+});
+
+app.get('/api/patients', (_req, res) => {
+  res.send(patientsService.getNonSensitiveEntries());
 });
 
 app.listen(PORT, () => {
