@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import express from 'express';
 const app = express();
 import cors from 'cors';
@@ -23,7 +24,7 @@ app.get('/api/diagnoses', (_req, res) => {
   res.send(diagnosisService.getEntries());
 });
 
-app.get('/:id', (req, res) => {
+app.get('/api/:id', (req, res) => {
   const patient = patientsService.findById(req.params.id);
 
   if (patient) {
@@ -33,6 +34,17 @@ app.get('/:id', (req, res) => {
   }
 });
 
+app.post('/api/patient', (req, res) => {
+  const { name, dateOfBirth, ssn, gender, occupation} = req.body;
+  const newPatientEntry = patientsService.addEntry({
+    name,
+    dateOfBirth,
+    ssn,
+    gender, 
+    occupation
+  });
+  res.json(newPatientEntry);
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

@@ -1,5 +1,5 @@
 import patientsData from '../data/patients.json';
-import { NonSensitivePatientEntry, PatientEntry } from '../types';
+import { NewPatientEntry, NonSensitivePatientEntry, PatientEntry } from '../types';
 
 const patients: Array<PatientEntry> = patientsData as Array<PatientEntry>;
 
@@ -28,12 +28,23 @@ const findById = (id: string): NonSensitivePatientEntry | undefined => {
     const { id, name, dateOfBirth, gender, occupation} = entry;
     return ({ id, name, dateOfBirth, gender, occupation });
   }
-  
+
   return undefined;
+};
+
+const addEntry = (entry: NewPatientEntry): PatientEntry => {
+    const newPatientEntry = {
+      id: String(Math.random()*100000000),
+      ...entry
+    };
+
+    patients.push(newPatientEntry);
+    return newPatientEntry;
 };
 
 export default {
   getEntries,
   getNonSensitiveEntries,
-  findById
+  findById,
+  addEntry
 };
