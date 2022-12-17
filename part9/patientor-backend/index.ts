@@ -4,6 +4,7 @@ const app = express();
 import cors from 'cors';
 import patientsService from './services/patientsService';
 import diagnosisService from './services/diagnosisService';
+import toNewPatientEntry from './utils';
 
 app.use(express.json());
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -35,15 +36,14 @@ app.get('/api/:id', (req, res) => {
 });
 
 app.post('/api/patient', (req, res) => {
-  const { name, dateOfBirth, ssn, gender, occupation} = req.body;
-  const newPatientEntry = patientsService.addEntry({
-    name,
-    dateOfBirth,
-    ssn,
-    gender, 
-    occupation
-  });
-  res.json(newPatientEntry);
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const newPatientEntry = toNewPatientEntry(req.body);
+    const addedEntry = patientsService.addEntry(newPatientEntry);
+    res.json(addedEntry);
+  } catch (error: unknown) {
+    res.status(400).send(`Incorrect format for patient! Error: ${error}`);
+  }
 });
 
 app.listen(PORT, () => {
