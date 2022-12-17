@@ -1,5 +1,6 @@
 import patientsData from '../data/patients.json';
 import { NewPatientEntry, NonSensitivePatientEntry, PatientEntry } from '../types';
+import { v1 as uuid } from 'uuid';
 
 const patients: Array<PatientEntry> = patientsData as Array<PatientEntry>;
 
@@ -34,7 +35,8 @@ const findById = (id: string): NonSensitivePatientEntry | undefined => {
 
 const addEntry = (entry: NewPatientEntry): PatientEntry => {
     const newPatientEntry = {
-      id: String(Math.random()*100000000),
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      id: String(uuid()),
       ...entry
     };
 
