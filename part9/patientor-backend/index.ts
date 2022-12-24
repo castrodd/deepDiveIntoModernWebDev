@@ -25,7 +25,7 @@ app.get('/api/diagnoses', (_req, res) => {
   res.send(diagnosisService.getEntries());
 });
 
-app.get('/api/:id', (req, res) => {
+app.get('/api/patients/:id', (req, res) => {
   const patient = patientsService.findById(req.params.id);
 
   if (patient) {

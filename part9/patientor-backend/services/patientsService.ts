@@ -1,5 +1,9 @@
 import patientEntries from '../data/patientsData';
-import { NewPatientEntry, NonSensitivePatientEntry, PatientEntry } from '../types';
+import { NewPatientEntry, 
+  NonSensitivePatientEntry, 
+  PatientEntry,
+  Patient, 
+  Gender} from '../types';
 import { v1 as uuid } from 'uuid';
 
 const patients: Array<PatientEntry> = patientEntries;
@@ -23,11 +27,13 @@ const getNonSensitiveEntries = (): NonSensitivePatientEntry[] => {
   }));
 };
 
-const findById = (id: string): NonSensitivePatientEntry | undefined => {
+const findById = (id: string): Patient | undefined => {
   const entry = patients.find(d => d.id === id);
   if (entry) {
-    const { id, name, dateOfBirth, gender, occupation} = entry;
-    return ({ id, name, dateOfBirth, gender, occupation });
+    const gender = entry.gender == "male" ? Gender.Male : Gender.Female;
+    const entries = !entry.entries ? [] : entry.entries;
+    
+    return { ...entry, gender, entries};
   }
 
   return undefined;
