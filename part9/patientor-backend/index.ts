@@ -35,7 +35,7 @@ app.get('/api/:id', (req, res) => {
   }
 });
 
-app.post('/api/patient', (req, res) => {
+app.post('/api/patients', (req, res) => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const newPatientEntry = toNewPatientEntry(req.body);
