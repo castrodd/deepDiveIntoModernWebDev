@@ -1,8 +1,5 @@
-interface ContentElement {
-  name: string;
-  exerciseCount: number;
-}
+import { CoursePart } from "../data/Course";
 
 export interface ContentProps {
-  content: ContentElement[];
+  content: CoursePart[];
 }
