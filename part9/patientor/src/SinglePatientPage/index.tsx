@@ -15,7 +15,7 @@ const SinglePatientPage = () => {
         const { data: currentPatient } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
         );
-        console.log("THIS IS THE PATIENT", currentPatient);
+        
         setPatient(currentPatient);
       } else {
         throw new Error("No id provided!");
