@@ -1,16 +1,13 @@
 import React from "react";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
-//import { useStateValue } from "../state";
 import { useParams } from "react-router-dom";
 import { Patient } from "../types";
 
-
 const SinglePatientPage = () => {
-  //const [{ patients }, dispatch] = useStateValue();
   const id = useParams().id;
   const [patient, setPatient] = React.useState<Patient>();
-  //const [error, setError] = React.useState<string>();
+  const [error, setError] = React.useState<string>();
 
   const fetchSinglePatient = async () => {
     try {
@@ -26,10 +23,10 @@ const SinglePatientPage = () => {
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
         console.error(e?.response?.data || "Unrecognized axios error");
-        //setError(String(e?.response?.data?.error) || "Unrecognized axios error");
+        setError(String(e?.response?.data?.error) || "Unrecognized axios error");
       } else {
         console.error("Unknown error", e);
-        //setError("Unknown error");
+        setError("Unknown error");
       }
     }
   };
@@ -41,6 +38,14 @@ const SinglePatientPage = () => {
   
     void getSinglePatient();
   });
+
+  if (error) {
+    return (
+      <div>
+        <p>{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="App">
