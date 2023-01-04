@@ -15,10 +15,11 @@ const EntriesTable = ({ entries }: EntriesTableProps) => {
                             <p>{entry.date}</p>
                             <p>{entry.description}</p>
                             <ul>
-                            {entry?.diagnosisCodes && entry?.diagnosisCodes.map(code => {
-                                <li>{code}</li>;
-                            })
-                            }
+                                {entry?.diagnosisCodes && entry?.diagnosisCodes.map(code => {
+                                    return (
+                                        <li key={code}>{code}</li>
+                                    );
+                                })}
                             </ul>
                         </div>
                     );
