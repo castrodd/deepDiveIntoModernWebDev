@@ -1,19 +1,20 @@
-import patientEntries from '../data/patientsData';
+import patients from '../data/patients';
 import { NewPatientEntry, 
   NonSensitivePatientEntry, 
   PatientEntry,
   Patient, 
   Gender} from '../types';
 import { v1 as uuid } from 'uuid';
+import { extractGender, parseGender } from "../utils";
 
-const patients: Array<PatientEntry> = patientEntries;
+const patientEntries: Array<Patient> = patients;
 
 const getEntries = (): PatientEntry[] => {
-  return patients;
+  return patientEntries;
 };
 
 const getNonSensitiveEntries = (): NonSensitivePatientEntry[] => {
-  return patients.map(({ 
+  return patientEntries.map(({ 
     id,
     name,
     dateOfBirth,
@@ -28,7 +29,7 @@ const getNonSensitiveEntries = (): NonSensitivePatientEntry[] => {
 };
 
 const findById = (id: string): Patient | undefined => {
-  const entry = patients.find(d => d.id === id);
+  const entry = patientEntries.find(d => d.id === id);
   if (entry) {
     const gender = entry.gender == "male" ? Gender.Male : Gender.Female;
     const entries = !entry.entries ? [] : entry.entries;
@@ -39,11 +40,18 @@ const findById = (id: string): Patient | undefined => {
   return undefined;
 };
 
-const addEntry = (entry: NewPatientEntry): PatientEntry => {
+const addEntry = (entry: NewPatientEntry): Patient => {
+    const stringGender = extractGender(entry);
+    let parsedGender = parseGender(stringGender);
+
+    const checkedEntries = entry.entries ? entry.entries : [];
+
     const newPatientEntry = {
+      ...entry,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       id: String(uuid()),
-      ...entry
+      gender: parsedGender,
+      entries: checkedEntries
     };
 
     patients.push(newPatientEntry);

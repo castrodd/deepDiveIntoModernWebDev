@@ -19,7 +19,7 @@ const isGender = (str: any): str is Gender => {
   return Object.values(Gender).includes(str);
 };
 
-const parseGender = (gender: unknown):Gender => {
+export const parseGender = (gender: unknown): Gender => {
   if (!gender || !isGender(gender)) {
     throw new Error("Incorrect type for gender!");
   }
@@ -27,7 +27,18 @@ const parseGender = (gender: unknown):Gender => {
   return gender;
 };
 
-type Fields = {name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown};
+export const extractGender = (entry: NewPatientEntry): string => {
+  const { gender } = entry;
+  return gender;
+}
+
+type Fields = {
+  name: unknown, 
+  dateOfBirth: unknown, 
+  ssn: unknown, 
+  gender: unknown, 
+  occupation: unknown
+};
 
 const toNewPatientEntry = ({name, dateOfBirth, ssn, gender, occupation}: Fields): NewPatientEntry => {
   const newEntry: NewPatientEntry = {
