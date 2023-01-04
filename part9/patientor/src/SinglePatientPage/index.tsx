@@ -3,6 +3,7 @@ import axios from "axios";
 import { apiBaseUrl } from "../constants";
 import { useParams } from "react-router-dom";
 import { Patient } from "../types";
+import EntriesTable from "../components/EntriesTable";
 
 const SinglePatientPage = () => {
   const id = useParams().id;
@@ -53,6 +54,7 @@ const SinglePatientPage = () => {
       <p>{patient?.gender}</p>
       <p>{patient?.dateOfBirth}</p>
       <p>{patient?.occupation}</p>
+      {patient?.entries && <EntriesTable entries={patient?.entries} />}
     </div>
   );
 };
