@@ -4,6 +4,7 @@ import { apiBaseUrl } from "../constants";
 import { useParams } from "react-router-dom";
 import { Patient } from "../types";
 import EntriesTable from "../components/EntriesTable";
+import Gender from "../components/Gender";
 
 const SinglePatientPage = () => {
   const id = useParams().id;
@@ -51,7 +52,7 @@ const SinglePatientPage = () => {
   return (
     <div className="App">
       <p>{patient?.name}</p>
-      <p>{patient?.gender}</p>
+      <Gender gender={patient ? patient.gender : ""} />
       <p>{patient?.dateOfBirth}</p>
       <p>{patient?.occupation}</p>
       {patient?.entries && <EntriesTable entries={patient?.entries} />}
