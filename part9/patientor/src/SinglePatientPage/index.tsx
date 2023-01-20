@@ -52,7 +52,7 @@ const SinglePatientPage = () => {
   return (
     <div className="App">
       <p>{patient?.name}</p>
-      <Gender gender={patient ? patient.gender : ""} />
+      <Gender gender={patient?.gender} />
       <p>{patient?.dateOfBirth}</p>
       <p>{patient?.occupation}</p>
       {patient?.entries && <EntriesTable entries={patient?.entries} />}
