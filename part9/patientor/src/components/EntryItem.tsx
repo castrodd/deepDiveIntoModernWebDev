@@ -1,4 +1,5 @@
 import { Entry } from "../types";
+import { EntryTypeIcon } from "./EntryTypeIcon";
 
 interface EntryItemProps {
     entry: Entry;
@@ -8,7 +9,8 @@ interface EntryItemProps {
 export const EntryItem = ({entry, diagnosesMap}: EntryItemProps) => {
     return (
         <div className="entryItem" key={entry.id}>
-            <p>{entry.date}</p>
+            <p>{entry.date} {<EntryTypeIcon type={entry.type} />}</p>
+            <p>Specialist: {entry.specialist}</p>
             <p>{entry.description}</p>
             <ul>
                 {entry?.diagnosisCodes && entry?.diagnosisCodes.map(code => {
