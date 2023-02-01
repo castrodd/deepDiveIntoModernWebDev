@@ -49,7 +49,11 @@ app.post('/api/patients', (req, res) => {
 app.post('/api/patients/:id/entries', (req, res) => {
   try {
     const addedEntry = patientsService.addEntryToPatientEntries(req.params.id, req.body);
-    res.json(addedEntry);
+    if (addedEntry) {
+      res.json(addedEntry)
+     } else {
+      throw "POST failed!";
+     }
   } catch (error: unknown) {
     res.status(400).send(`Incorrect format for patient entry! Error: ${error}`);
   }

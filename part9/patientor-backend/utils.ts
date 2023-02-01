@@ -1,5 +1,5 @@
 import { NewPatientEntry } from "./types";
-import { Gender } from "./types";
+import { Entry, Gender } from "./types";
 
 const parseStringField = (field: unknown) => {
   if (!field || !isString(field)) {
@@ -30,7 +30,23 @@ export const parseGender = (gender: unknown): Gender => {
 export const extractGender = (entry: NewPatientEntry): string => {
   const { gender } = entry;
   return gender;
-}
+};
+
+export const checkPatientEntryType = (entry: Entry): boolean => {
+  switch (entry.type) {
+    case "HealthCheck":
+      if (entry.healthCheckRating) return true;
+      return false;
+    case "Hospital":
+      if (entry.discharge) return true;
+      return false;
+    case "OccupationalHealthCare":
+      if (entry.employerName) return true;
+      return false;
+    default:
+      return false;
+  }
+};
 
 type Fields = {
   name: unknown, 

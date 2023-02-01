@@ -6,7 +6,7 @@ import { NewPatientEntry,
   Patient, 
   Gender} from '../types';
 import { v1 as uuid } from 'uuid';
-import { extractGender, parseGender } from "../utils";
+import { extractGender, parseGender, checkPatientEntryType } from "../utils";
 
 const patientEntries: Array<Patient> = patients;
 
@@ -61,7 +61,7 @@ const addEntry = (entry: NewPatientEntry): Patient => {
 
 const addEntryToPatientEntries = (id: string, entry: Entry): Entry | undefined => {
   const patient = patientEntries.find(d => d.id === id);
-  if (patient) {
+  if (patient && checkPatientEntryType(entry)) {
     patient.entries.push(entry);
     return entry;
   }
