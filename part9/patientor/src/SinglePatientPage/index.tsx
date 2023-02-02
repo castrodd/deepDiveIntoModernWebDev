@@ -42,6 +42,8 @@ const SinglePatientPage = () => {
           {
             ...entry
           });
+        
+          await fetchSinglePatient();
       } else {
         throw new Error("No id provided!");
       }
