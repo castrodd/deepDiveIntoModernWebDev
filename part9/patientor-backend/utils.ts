@@ -44,6 +44,7 @@ export const checkPatientEntryType = (entry: Entry): boolean => {
       if (entry.employerName) return true;
       return false;
     default:
+      console.log("Failed patient entry validation!!!");
       return false;
   }
 };

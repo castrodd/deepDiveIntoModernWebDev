@@ -38,7 +38,7 @@ const EntriesTable = ({ entries }: EntriesTableProps) => {
         };
 
         void getDiagnoses();
-    });
+    }, []);
 
     if (error) {
         return (
