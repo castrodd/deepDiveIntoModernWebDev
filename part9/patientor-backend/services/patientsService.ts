@@ -62,8 +62,9 @@ const addEntry = (entry: NewPatientEntry): Patient => {
 const addEntryToPatientEntries = (id: string, entry: Entry): Entry | undefined => {
   const patient = patientEntries.find(d => d.id === id);
   if (patient && checkPatientEntryType(entry)) {
-    patient.entries.push(entry);
-    return entry;
+    const validatedEntry = {...entry, id: String(uuid())};
+    patient.entries.push(validatedEntry);
+    return validatedEntry;
   }
 
   return undefined;

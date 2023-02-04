@@ -10,6 +10,12 @@ export enum Gender {
   Other = "other"
 }
 
+export enum EntryType {
+  Hospital = "Hospital",
+  HealthCheck = "HealthCheck",
+  OccupationalHealthCare = "OccupationalHealthCare"
+}
+
 export interface Patient {
   id: string;
   name: string;
@@ -35,7 +41,7 @@ interface Discharge {
 }
 
 interface HospitalEntry extends BaseEntry {
-  type: "Hospital",
+  type: EntryType.Hospital,
   discharge: Discharge
 }
 
@@ -45,7 +51,7 @@ interface SickLeave {
 }
 
 interface OccupationalHealthcareEntry extends BaseEntry {
-  type: "OccupationalHealthCare",
+  type: EntryType.OccupationalHealthCare,
   employerName: string,
   sickLeave?: SickLeave
 }
@@ -58,7 +64,7 @@ export enum HealthCheckRating {
 }
 
 interface HealthCheckEntry extends BaseEntry {
-  type: "HealthCheck",
+  type: EntryType.HealthCheck,
   healthCheckRating: HealthCheckRating
 }
 
