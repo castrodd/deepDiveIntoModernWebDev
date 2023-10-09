@@ -10,7 +10,7 @@
     "graphql-subscriptions": "^2.0.0",
     "graphql-ws": "^5.11.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.6.7",
+    "mongoose": "^6.11.3",
     "ws": "^8.11.0"
   },
   "name": "gql-starter",
